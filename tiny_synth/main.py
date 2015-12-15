@@ -21,7 +21,10 @@ def readPickleConfig(name, cfg, defaultVal, from_string):
     if raw == '':
         return defaultVal
     else:
-        return from_string(raw)
+        try:
+            return from_string(raw)
+        except:
+            return defaultVal
 
 def getRecent(cfg):
     rawList = self.cfg.Read
@@ -33,7 +36,7 @@ class St():
         self.fadersDict = readPickleConfig(inits.fadersDictName, self.cfg, {}, faders.Faders.from_string)
         self.recent     = readPickleConfig(inits.recent, self.cfg, Recent(), Recent.from_string)
         self.favs       = readPickleConfig(inits.favs, self.cfg, Favorites(), Favorites.from_string)
-        self.fontSize   = inits.defaultFontSize #readPickleConfig(inits.fontSize, self.cfg, inits.defaultFontSize)
+        self.fontSize   = readPickleConfig(inits.fontSize, self.cfg, inits.defaultFontSize, int)
 
     def getRecent(self):
         return self.recent
@@ -54,7 +57,7 @@ class St():
         faders.updateFile(self.fadersDict, pathToCsdFile(path), val)
 
     def setFontSize(self, val):
-        self.cfg.Write(inits.fontSize, json.dumps(val))
+        self.cfg.Write(inits.fontSize, str(val))
 
     def upFontSize(self):
         self.fontSize = min(self.fontSize + 1, 18)
@@ -123,19 +126,17 @@ def getInstruments():
     instrumentsPath = pkg_resources.resource_filename('tiny_synth.instruments', '')    
     dirs = filter(lambda x: x != '__init__.py', pkg_resources.resource_listdir('tiny_synth.instruments', ''))    
     cats = map(os.path.basename, dirs)
+    cats.sort()
     
     def getCsds(c):
         files = map(lambda x: stripExt(os.path.basename(x)), glob.glob(os.path.join(instrumentsPath, c, '*')))
+        files.sort()
         return (c, files)
+    
+    return map(getCsds, cats)    
 
-    return map(getCsds, cats)
 
 taxonomy = getInstruments()
-
-# taxonomy = [ ('electric piano', ['epiano1', 'epiano2', 'rhodes'])
-#            , ('pad', ['warm pad', 'sweep pad', 'pw pad', 'overtone'])
-#            , ('organ', ['church', 'cathedral', 'hammond'])
-#            , ('woodwind', ['flute', 'clarinet', 'basson', 'hulusi']) ]
 
 class PageOne(wx.Panel):
     def __init__(self, parent, frame):
@@ -176,7 +177,7 @@ class Recent():
         self.items = items
         self.limit = limit
 
-    def append(self, x):        
+    def append(self, x):            
         if x in self.items:
             self.items.remove(x)
         self.items.insert(0, x)
@@ -377,8 +378,8 @@ class MyFrame(wx.Frame):
                # , normalItem('Settings')
                 ])
             , menuItem('&Edit', [
-                  normalItem('Enlarge font: Ctr,+', cbk = self.OnFontUp)
-                , normalItem('Shrink  font: Ctr,-', cbk = self.OnFontDown)
+                  normalItem('Enlarge font', cbk = self.OnFontUp)
+                , normalItem('Shrink  font', cbk = self.OnFontDown)
             ])  
             , menuItem('&Help',[                  
                 normalItem('About', cbk = self.OnAbout)  
