@@ -7,7 +7,7 @@ import pkg_resources
 import wx
 import os.path
 import glob
-import marshal as pickle
+import json
 
 from tiny_synth.utils import *
 from tiny_synth.piano import Piano
@@ -16,20 +16,12 @@ import tiny_synth.midi as midi
 import tiny_synth.faders as faders 
 from tiny_synth.player import Player
 
-def readPickleConfig(name, cfg, defaultVal):
+def readPickleConfig(name, cfg, defaultVal, from_string):
     raw = cfg.Read(name, '')
     if raw == '':
         return defaultVal
     else:
-        return pickle.loads(raw)
-
-def readFadersConfig(cfg, defaultVal):
-    name = inits.fadersDictName
-    raw = cfg.Read(name, '')
-    if raw == '':
-        return defaultVal
-    else:
-        return faders.from_string(raw)
+        return from_string(raw)
 
 def getRecent(cfg):
     rawList = self.cfg.Read
@@ -38,22 +30,22 @@ def getRecent(cfg):
 class St():
     def __init__(self):
         self.cfg = wx.Config(inits.cfgName)
-        self.fadersDict = {} #readPickleConfig(inits.fadersDictName, self.cfg, {})
-        self.recent = Recent() #readPickleConfig(inits.recent, self.cfg, Recent())
-        self.favs = Favorites() #readPickleConfig(inits.favs, self.cfg, Favorites())
-        self.fontSize = inits.defaultFontSize #readPickleConfig(inits.fontSize, self.cfg, inits.defaultFontSize)
+        self.fadersDict = readPickleConfig(inits.fadersDictName, self.cfg, {}, faders.Faders.from_string)
+        self.recent     = readPickleConfig(inits.recent, self.cfg, Recent(), Recent.from_string)
+        self.favs       = readPickleConfig(inits.favs, self.cfg, Favorites(), Favorites.from_string)
+        self.fontSize   = inits.defaultFontSize #readPickleConfig(inits.fontSize, self.cfg, inits.defaultFontSize)
 
     def getRecent(self):
         return self.recent
 
     def setRecent(self, recent):
-        self.cfg.Write(inits.recent, pickle.dumps(recent))
+        self.cfg.Write(inits.recent, recent.to_string())
 
     def getFavs(self):
         return self.favs
 
     def setFavs(self, favs):
-        self.cfg.Write(inits.favs, pickle.dumps(favs))
+        self.cfg.Write(inits.favs, favs.to_string())
 
     def getFaders(self, path):
         return faders.loadFromFile(self.fadersDict, pathToCsdFile(path))
@@ -62,7 +54,7 @@ class St():
         faders.updateFile(self.fadersDict, pathToCsdFile(path), val)
 
     def setFontSize(self, val):
-        self.cfg.Write(inits.fontSize, pickle.dumps(val))
+        self.cfg.Write(inits.fontSize, json.dumps(val))
 
     def upFontSize(self):
         self.fontSize = min(self.fontSize + 1, 18)
@@ -73,7 +65,7 @@ class St():
         self.setFontSize(self.fontSize)
 
     def close(self, recent, favs):
-        self.cfg.Write(inits.fadersDictName, faders.to_string(self.fadersDict))
+        self.cfg.Write(inits.fadersDictName, faders.Faders.to_string(self.fadersDict))
         self.setFavs(favs)
         self.setRecent(recent)        
 
@@ -197,6 +189,18 @@ class Recent():
     def __repr__(self):
         return repr(self.items)
 
+    @staticmethod    
+    def from_string(s):
+        print s
+        try:
+            return Recent(map(tuple, json.loads(s)))
+        except:
+            return Recent()
+
+
+    def to_string(self):
+        return json.dumps(self.items)
+
 class Favorites():
     def __init__(self, items = []):
         self.items = items
@@ -213,6 +217,16 @@ class Favorites():
 
     def __repr__(self):
         return repr(self.items)
+
+    @staticmethod    
+    def from_string(s):
+        try:        
+            return Favorites(map(tuple, json.loads(s)))
+        except:
+            return Favorites()
+
+    def to_string(self):
+        return json.dumps(self.items)
  
 def fillTree(tree, items, name, font):
     tree.DeleteAllItems()

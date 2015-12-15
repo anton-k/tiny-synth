@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"res",
+				"resource_string"
+			],
+			[
 				"ti",
 				"tiny_synth"
 			],
@@ -510,10 +514,6 @@
 			[
 				"forma",
 				"formantWidth"
-			],
-			[
-				"ivi",
-				"ivib2"
 			]
 		]
 	},
@@ -523,7 +523,7 @@
 			"file": "tiny_synth/main.py",
 			"settings":
 			{
-				"buffer_size": 15105,
+				"buffer_size": 15354,
 				"line_ending": "Unix"
 			}
 		},
@@ -531,12 +531,20 @@
 			"file": "setup.py",
 			"settings":
 			{
-				"buffer_size": 1633,
+				"buffer_size": 1937,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "tiny_synth/__init__.py",
+			"file": "MANIFEST.in",
+			"settings":
+			{
+				"buffer_size": 81,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "tiny_synth/resources/__init__.py",
 			"settings":
 			{
 				"buffer_size": 0,
@@ -544,10 +552,18 @@
 			}
 		},
 		{
-			"file": "/home/anton/x/try_st/setup.py",
+			"file": "tiny_synth/piano.py",
 			"settings":
 			{
-				"buffer_size": 175,
+				"buffer_size": 6509,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "tiny_synth/inits.py",
+			"settings":
+			{
+				"buffer_size": 389,
 				"line_ending": "Unix"
 			}
 		},
@@ -560,26 +576,18 @@
 			}
 		},
 		{
-			"file": "/home/anton/x/try_st/try_st/__init__.py",
-			"settings":
-			{
-				"buffer_size": 71,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/home/anton/x/try_st/try_st/main.py",
-			"settings":
-			{
-				"buffer_size": 103,
-				"line_ending": "Unix"
-			}
-		},
-		{
 			"file": "tiny_synth/player.py",
 			"settings":
 			{
-				"buffer_size": 1778,
+				"buffer_size": 1884,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/home/anton/dev/csound-player/Player.py",
+			"settings":
+			{
+				"buffer_size": 3554,
 				"line_ending": "Unix"
 			}
 		},
@@ -596,14 +604,6 @@
 			"settings":
 			{
 				"buffer_size": 2420,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "tiny_synth/piano.py",
-			"settings":
-			{
-				"buffer_size": 6509,
 				"line_ending": "Unix"
 			}
 		},
@@ -687,10 +687,14 @@
 	},
 	"expanded_folders":
 	[
-		"/home/anton/dev/tiny-synth/src"
+		"/home/anton/dev/tiny-synth/src",
+		"/home/anton/dev/tiny-synth/tiny_synth"
 	],
 	"file_history":
 	[
+		"/home/anton/x/try_st/try_st/__init__.py",
+		"/home/anton/x/try_st/setup.py",
+		"/home/anton/x/try_st/try_st/main.py",
 		"/home/anton/dev/tiny-synth/MANIFEST.in",
 		"/home/anton/dev/csound-player/PlayerUI.py",
 		"/home/anton/dev/csound-player/main.py",
@@ -815,10 +819,7 @@
 		"/home/anton/dev/csound-expression-typed/src/Csound/Typed/Control/Osc.hs",
 		"/home/anton/dev/csound-expression-typed/src/Csound/Typed/Lib/StableMaps/Dynamic.hs",
 		"/home/anton/dev/csound-expression-typed/src/Csound/Typed/Lib/StableMaps/Dynamic/Map.hs",
-		"/home/anton/dev/csound-expression-typed/src/Csound/Typed/Gui/BoxModel.hs",
-		"/home/anton/dev/csound-expression-typed/src/Csound/Typed/Types/Evt.hs",
-		"/home/anton/dev/csound-expression-typed/src/Csound/Typed/Control/Ref.hs",
-		"/home/anton/dev/csound-expression-typed/src/Csound/Typed/Lib/Dynamic.hs"
+		"/home/anton/dev/csound-expression-typed/src/Csound/Typed/Gui/BoxModel.hs"
 	],
 	"find":
 	{
@@ -845,6 +846,9 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"instrumentsPath",
+			"key_pic",
+			"keys1",
 			"json.",
 			"pickle.",
 			"pickl",
@@ -969,10 +973,7 @@
 			"whap",
 			"shaper",
 			"hrtf",
-			"toMono",
-			"toGE",
-			"liftIo",
-			"options"
+			"toMono"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1014,15 +1015,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 15105,
+						"buffer_size": 15354,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								742,
-								742
+								7184,
+								7184
 							]
 						],
 						"settings":
@@ -1032,7 +1033,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 204.0,
+						"translation.y": 3713.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
@@ -1044,15 +1045,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1633,
+						"buffer_size": 1937,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1193,
-								1193
+								1137,
+								1137
 							]
 						],
 						"settings":
@@ -1062,15 +1063,43 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 153.0,
+						"translation.y": 357.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "MANIFEST.in",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 81,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								81,
+								81
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 3,
 					"type": "text"
 				},
 				{
-					"buffer": 2,
-					"file": "tiny_synth/__init__.py",
+					"buffer": 3,
+					"file": "tiny_synth/resources/__init__.py",
 					"semi_transient": false,
 					"settings":
 					{
@@ -1097,20 +1126,50 @@
 					"type": "text"
 				},
 				{
-					"buffer": 3,
-					"file": "/home/anton/x/try_st/setup.py",
+					"buffer": 4,
+					"file": "tiny_synth/piano.py",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 175,
+						"buffer_size": 6509,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								29,
-								29
+								3110,
+								3110
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1384.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "tiny_synth/inits.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 389,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								255,
+								255
 							]
 						],
 						"settings":
@@ -1121,11 +1180,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 7,
 					"type": "text"
 				},
 				{
-					"buffer": 4,
+					"buffer": 6,
 					"file": "/home/anton/x/try_st/try_st/first.py",
 					"semi_transient": false,
 					"settings":
@@ -1149,62 +1208,6 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "/home/anton/x/try_st/try_st/__init__.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 71,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								71,
-								71
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Python/Python.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 7,
-					"type": "text"
-				},
-				{
-					"buffer": 6,
-					"file": "/home/anton/x/try_st/try_st/main.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 103,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								65,
-								65
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Python/Python.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
 					"stack_index": 6,
 					"type": "text"
 				},
@@ -1214,15 +1217,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1778,
+						"buffer_size": 1884,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								342,
-								342
+								985,
+								985
 							]
 						],
 						"settings":
@@ -1232,14 +1235,44 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 204.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 8,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
 					"buffer": 8,
+					"file": "/home/anton/dev/csound-player/Player.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3554,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								647,
+								647
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": -0.0,
+						"translation.y": 153.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 9,
 					"file": "tiny_synth/faders.py",
 					"semi_transient": false,
 					"settings":
@@ -1265,11 +1298,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 10,
 					"type": "text"
 				},
 				{
-					"buffer": 9,
+					"buffer": 10,
 					"file": "tiny_synth/midi.py",
 					"semi_transient": false,
 					"settings":
@@ -1283,36 +1316,6 @@
 							[
 								0,
 								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Python/Python.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 11,
-					"type": "text"
-				},
-				{
-					"buffer": 10,
-					"file": "tiny_synth/piano.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 6509,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								9,
-								9
 							]
 						],
 						"settings":
@@ -1355,7 +1358,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 10,
+					"stack_index": 11,
 					"type": "text"
 				}
 			]
