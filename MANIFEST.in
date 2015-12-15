@@ -1,0 +1,2 @@
+include tiny_synth/resources/keys1.jpg
+recursive-include tiny_synth/instruments *
