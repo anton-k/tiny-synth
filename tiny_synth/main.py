@@ -37,6 +37,7 @@ class St():
         self.recent     = readPickleConfig(inits.recent, self.cfg, Recent(), Recent.from_string)
         self.favs       = readPickleConfig(inits.favs, self.cfg, Favorites(), Favorites.from_string)
         self.fontSize   = readPickleConfig(inits.fontSize, self.cfg, inits.defaultFontSize, int)
+        self.tuning     = readPickleConfig(inits.tuning, self.cfg, inits.defaultTuning, int)
 
     def getRecent(self):
         return self.recent
@@ -46,6 +47,9 @@ class St():
 
     def getFavs(self):
         return self.favs
+
+    def getTuningId(self):        
+        return self.tuning
 
     def setFavs(self, favs):
         self.cfg.Write(inits.favs, favs.to_string())
@@ -59,6 +63,9 @@ class St():
     def setFontSize(self, val):
         self.cfg.Write(inits.fontSize, str(val))
 
+    def setTuning(self, val):
+        self.cfg.Write(inits.tuning, str(val))
+
     def upFontSize(self):
         self.fontSize = min(self.fontSize + 1, 18)
         self.setFontSize(self.fontSize)
@@ -67,10 +74,11 @@ class St():
         self.fontSize = max(self.fontSize - 1, 6)
         self.setFontSize(self.fontSize)
 
-    def close(self, recent, favs):
+    def close(self, recent, favs, tuningId):
         self.cfg.Write(inits.fadersDictName, faders.Faders.to_string(self.fadersDict))
         self.setFavs(favs)
-        self.setRecent(recent)        
+        self.setRecent(recent) 
+        self.setTuning(tuningId)       
 
     def getFont(self):
         font = wx.SystemSettings_GetFont(wx.SYS_SYSTEM_FONT)
@@ -191,8 +199,7 @@ class Recent():
         return repr(self.items)
 
     @staticmethod    
-    def from_string(s):
-        print s
+    def from_string(s):        
         try:
             return Recent(map(tuple, json.loads(s)))
         except:
@@ -292,11 +299,13 @@ class MyFrame(wx.Frame):
 
         self.recent = state.getRecent()
         self.favs = state.getFavs()
+        self.tuningId = state.getTuningId()
         self.currentTrack = None
         self.state = state
         self.fontObjects = FontObjects()
 
         self.player = Player()
+        self.player.setTuning(self.tuningId)
 
         vbox = wx.BoxSizer(wx.VERTICAL)
         panel1 = wx.Panel(self, -1)
@@ -371,6 +380,12 @@ class MyFrame(wx.Frame):
 
         self.initPlayerFile()
         
+        def setTuning(n):
+            def go(evt):
+                self.tuningId = n
+                self.player.setTuning(n)
+            return go
+
         mkMenuBar(self, [
               menuItem('&File',[
                   normalItem('Add to favs', cbk = self.OnAddToFavs)
@@ -380,6 +395,7 @@ class MyFrame(wx.Frame):
             , menuItem('&Edit', [
                   normalItem('Enlarge font', cbk = self.OnFontUp)
                 , normalItem('Shrink  font', cbk = self.OnFontDown)
+                , menuItem('Tuning', [ radioItem(name, cbk = setTuning(i), is_check = self.tuningId == i) for i, name in enumerate(inits.tunings) ])
             ])  
             , menuItem('&Help',[                  
                 normalItem('About', cbk = self.OnAbout)  
@@ -489,7 +505,7 @@ class MyFrame(wx.Frame):
     def onExit(self, evt):
         self.closeFile()
         self.player.close()
-        self.state.close(self.recent, self.favs)        
+        self.state.close(self.recent, self.favs, self.tuningId)        
         self.Destroy()
 
 class MyApp(wx.App):

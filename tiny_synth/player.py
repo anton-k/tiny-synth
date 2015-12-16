@@ -1,6 +1,8 @@
 import unicodedata
 import csnd6
 
+import tiny_synth.inits as inits
+
 def unicode2string(x):
     return unicodedata.normalize('NFKD', x).encode('ascii','ignore')
 
@@ -28,12 +30,15 @@ class Player():
         self.engine = csnd6.Csound()
         self.audioThread = None
         self.active_keys = KeyList()
+        self.tuning = 0
+
+    def setTuning(self, val):
+        self.tuning = val
 
     def close(self):
         self.stop()
 
-    def load(self, file, faders):    
-        print '*******' + file    
+    def load(self, file, faders):        
         self.stop()
         self.engine.Compile(unicode2string(file))
         self.engine.SetOption("-odac")
@@ -42,6 +47,7 @@ class Player():
         self.audioThread = csnd6.CsoundPerformanceThread(self.engine)
         self.audioThread.Play()
         faders.setPlayer(self)
+        self.setValue(inits.tuning, self.tuning)
         self.retrigger_active_keys()        
 
     def retrigger_active_keys(self):

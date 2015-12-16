@@ -20,14 +20,15 @@ def runApp(setup, title='', size=None):
 # Menu utils
 
 class Item():
-    def __init__(self, title, cbk = None, kind = wx.ITEM_NORMAL, children = []):
+    def __init__(self, title, cbk = None, kind = wx.ITEM_NORMAL, children = [], is_check = None):
         self.title = title
         self.cbk   = cbk
         self.kind  = kind
         self.children = children
+        self.is_check = is_check
 
-def radioItem(title, cbk = None):
-    return Item(title, cbk, wx.ITEM_RADIO)
+def radioItem(title, cbk = None, is_check = None):
+    return Item(title, cbk, wx.ITEM_RADIO, [], is_check)
 
 def normalItem(title, cbk = None):
     return Item(title, cbk, wx.ITEM_NORMAL)
@@ -46,8 +47,8 @@ def echoCheckItem(title):
 def echoRadioItem(title):
     return radioItem(title, cbk = echoPress(title))
 
-def checkItem(title, cbk = None):
-    return Item(title, cbk, wx.ITEM_CHECK)
+def checkItem(title, cbk = None, is_check = None):
+    return Item(title, cbk, wx.ITEM_CHECK, [], is_check)
 
 def menuItem(title, items):
     return Item(title, children = items)
@@ -55,6 +56,8 @@ def menuItem(title, items):
 def mkItem(root, parent, item):
     x = wx.MenuItem(parent, wx.ID_ANY, item.title, kind=item.kind)
     parent.AppendItem(x)
+    if item.is_check is not None:
+        x.Check(check = item.is_check)
     root.Bind(wx.EVT_MENU, item.cbk, x)
 
 def mkMenu(root, menubar, title, items):
