@@ -1,6 +1,7 @@
 Tiny synth
 =====================
 
+The synthesizer written in Haskell/Csound with library csound-expression.
 It illustrates the standard library of pathes from
 the library csound-expression. It's implemented in Haskell
 The UI part is made wxPython.
