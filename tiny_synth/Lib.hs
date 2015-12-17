@@ -273,5 +273,5 @@ applyParams scale p = do
     return $ mul (scale * vol) $ atMix kfx $ at (mkFilt cf rz) p
 
 mkFilt :: Sig -> Sig -> Sig -> Sig
-mkFilt cf rz x = x -- (lp (50 + 15000 * cf) (1 + rz * 20) x)
+mkFilt cf rz x = x -- ifB (sig (ir cf) >* 0.9) x (lp (50 + 15000 * cf) (1 + rz * 20) x)
 

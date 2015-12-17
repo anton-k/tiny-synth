@@ -14,7 +14,7 @@ instrumentsPath ='instruments'
 cfgName = 'tiny-synth-config'
 fadersDictName = 'faders-dict'
 
-tunings = ['Equal temperament', 'Meantone temperament', 'Pythagorean tuning', 'Just intonation', 'Tomas Young 1', 'Tomas Young 2', 'Werkmeister']
+tunings = ['Equal temperament', 'Meantone temperament', 'Pythagorean tuning', 'Just intonation', 'Thomas Young 1', 'Thomas Young 2', 'Werkmeister']
 
 volume = 'volume'
 fx = 'fx'
