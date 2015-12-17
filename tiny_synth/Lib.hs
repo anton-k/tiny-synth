@@ -251,11 +251,26 @@ mkInstr name scale x = case x of
     Poly a -> mkInstrPoly name scale a
 
 mkInstrMono :: String -> Sig -> Patch2m -> IO ()
-mkInstrMono path scale p = writeCsdBy setDac path $ do
-    vol <- chnGetCtrl (text "volume")
-    monoPatchByNameMidi "main" (mul (scale * vol) p)
+mkInstrMono path scale p = writeCsdBy setDac path $ 
+    monoPatchByNameMidi "main" =<< applyParams scale p
 
 mkInstrPoly :: String -> Sig -> Patch2 -> IO ()
-mkInstrPoly path scale p = writeCsdBy setDac path $ do
-    vol <- chnGetCtrl (text "volume")
-    patchByNameMidi "main" (mul (scale * vol) p)
+mkInstrPoly path scale p = writeCsdBy setDac path $ 
+    patchByNameMidi "main" =<< applyParams scale p
+
+getFaders :: SE (Sig, Sig, Sig, Sig)
+getFaders = do
+    vol  <- chnGetCtrl (text "volume")
+    kfx  <- chnGetCtrl (text "fx")
+    cf   <- chnGetCtrl (text "cut-off")
+    rz   <- chnGetCtrl (text "resonance")
+    return (vol, kfx, cf, rz)
+
+applyParams :: Sig -> Patch a Sig2 -> SE (Patch a Sig2)
+applyParams scale p = do 
+    (vol, kfx, cf, rz) <- getFaders
+    return $ mul (scale * vol) $ atMix kfx $ at (mkFilt cf rz) p
+
+mkFilt :: Sig -> Sig -> Sig -> Sig
+mkFilt cf rz x = mlp (50 + 10000 * cf) (rz * 0.95) x
+
