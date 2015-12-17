@@ -60,12 +60,15 @@ endin
 
 instr 19
 kr0 chnget "volume"
+kr1 chnget "fx"
+kr2 chnget "cut-off"
+kr3 chnget "resonance"
 ar0 = gargg0
 ar1 = gargg1
 ar2 delayr 1.2
-ir9 = 1.0
-ir10 = 3.75
-ar3 oscil3 ir9, ir10, 4
+ir15 = 1.0
+ir16 = 3.75
+ar3 oscil3 ir15, ir16, 4
 ar4 = (2.1000000000000003e-3 * ar3)
 ar3 = (ar4 + 1.0e-2)
 ar4 deltap3 ar3
@@ -74,19 +77,19 @@ ar5 delayr 1.2
 ar6 deltap3 ar3
  delayw ar1
 ar3 delayr 0.25
-ir26 = 0.25
-ar7 deltap3 ir26
+ir32 = 0.25
+ar7 deltap3 ir32
 ar8 = (0.75 * ar0)
-ar9 ntrpol ar0, ar4, ir9
+ar9 ntrpol ar0, ar4, ir15
 ar0 = (0.25 * ar9)
 ar4 = (ar8 + ar0)
 ar0 = (0.65 * ar7)
 ar8 = (ar4 + ar0)
  delayw ar8
 ar0 delayr 0.25
-ar8 deltap3 ir26
+ar8 deltap3 ir32
 ar9 = (0.75 * ar1)
-ar10 ntrpol ar1, ar6, ir9
+ar10 ntrpol ar1, ar6, ir15
 ar1 = (0.25 * ar10)
 ar6 = (ar9 + ar1)
 ar1 = (0.65 * ar8)
@@ -94,33 +97,37 @@ ar9 = (ar6 + ar1)
  delayw ar9
 arl0 init 0.0
 arl1 init 0.0
-ar1 = (0.75 * ar4)
-ar9 = (ar7 * 1.0)
-ar7 = (ar4 + ar9)
+ir59 = 0.1
+kr4 portk kr1, ir59
+ar1 upsamp kr4
+ar9 = (1.0 - ar1)
+ar10 = (0.75 * ar4)
+ar11 = (ar7 * 1.0)
+ar7 = (ar4 + ar11)
 ar4 = (0.25 * ar7)
-ar7 = (ar1 + ar4)
-ar1 = (0.65 * ar7)
-ar4 = (0.75 * ar6)
-ar9 = (ar8 * 1.0)
-ar8 = (ar6 + ar9)
+ar7 = (ar10 + ar4)
+ar4 = (ar9 * ar7)
+ar10 = (0.75 * ar6)
+ar11 = (ar8 * 1.0)
+ar8 = (ar6 + ar11)
 ar6 = (0.25 * ar8)
-ar8 = (ar4 + ar6)
-ir64 = 0.9
-ir65 = 12000.0
-ar4, ar6 reverbsc ar7, ar8, ir64, ir65
-ar9 = (ar7 + ar4)
-ar4 = (0.35 * ar9)
-ar7 = (ar1 + ar4)
-ar1 clip ar7, 0.0, 0dbfs
-ar4 = (ar1 * 0.8)
-arl0 = ar4
-ar1 = (0.65 * ar8)
-ar4 = (ar8 + ar6)
-ar6 = (0.35 * ar4)
-ar4 = (ar1 + ar6)
-ar1 clip ar4, 0.0, 0dbfs
-ar4 = (ar1 * 0.8)
-arl1 = ar4
+ar8 = (ar10 + ar6)
+ir73 = 0.9
+ir74 = 12000.0
+ar6, ar10 reverbsc ar7, ar8, ir73, ir74
+ar11 = (ar7 + ar6)
+ar6 = (ar1 * ar11)
+ar7 = (ar4 + ar6)
+ar4 clip ar7, 0.0, 0dbfs
+ar6 = (ar4 * 0.8)
+arl0 = ar6
+ar4 = (ar9 * ar8)
+ar6 = (ar8 + ar10)
+ar7 = (ar1 * ar6)
+ar1 = (ar4 + ar7)
+ar4 clip ar1, 0.0, 0dbfs
+ar1 = (ar4 * 0.8)
+arl1 = ar1
 ar1 = arl0
 ar4 = arl1
  outs ar1, ar4

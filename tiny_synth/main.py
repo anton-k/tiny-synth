@@ -130,9 +130,12 @@ def slider(frame, v, cbk):
 def stripExt(x):
     return (os.path.splitext(x))[0]
 
+def getInstrumentPath():
+    return os.path.join(pkg_resources.resource_filename('tiny_synth', ''), 'instruments')    
+
 def getInstruments():
-    instrumentsPath = pkg_resources.resource_filename('tiny_synth.instruments', '')    
-    dirs = filter(lambda x: x != '__init__.py', pkg_resources.resource_listdir('tiny_synth.instruments', ''))    
+    instrumentsPath = getInstrumentPath()
+    dirs = glob.glob(os.path.join(instrumentsPath, '*'))
     cats = map(os.path.basename, dirs)
     cats.sort()
     
@@ -247,7 +250,7 @@ def fillTree(tree, items, name, font):
     tree.ExpandAll()
 
 def pathToCsdFile(path):
-    instrumentsPath = pkg_resources.resource_filename('tiny_synth.instruments', '')
+    instrumentsPath = getInstrumentPath()
     return os.path.join(instrumentsPath, *path) + u'.csd'
 
 class FontObjects():

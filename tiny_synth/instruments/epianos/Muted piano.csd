@@ -56,29 +56,36 @@ endin
 
 instr 19
 kr0 chnget "volume"
+kr1 chnget "fx"
+kr2 chnget "cut-off"
+kr3 chnget "resonance"
 ar0 = gargg0
 ar1 = gargg1
 arl0 init 0.0
 arl1 init 0.0
-ar2 = (0.75 * ar0)
-ir12 = 3750.0
-ir13 = 0.2
-ir14 = 0.0
-ar3 lpf18 ar0, ir12, ir13, ir14
-ar0 lpf18 ar1, ir12, ir13, ir14
-ir17 = 0.9
-ir18 = 12000.0
-ar4, ar5 reverbsc ar3, ar0, ir17, ir18
-ar6 = (ar3 + ar4)
-ar3 = (0.25 * ar6)
-ar4 = (ar2 + ar3)
-ar2 clip ar4, 0.0, 0dbfs
-ar3 = (ar2 * 0.8)
-arl0 = ar3
-ar2 = (0.75 * ar1)
-ar1 = (ar0 + ar5)
-ar0 = (0.25 * ar1)
-ar1 = (ar2 + ar0)
+ir17 = 0.1
+kr4 portk kr1, ir17
+ar2 upsamp kr4
+ar3 = (1.0 - ar2)
+ar4 = (ar3 * ar0)
+ir21 = 3750.0
+ir22 = 0.2
+ir23 = 0.0
+ar5 lpf18 ar0, ir21, ir22, ir23
+ar0 lpf18 ar1, ir21, ir22, ir23
+ir26 = 0.9
+ir27 = 12000.0
+ar6, ar7 reverbsc ar5, ar0, ir26, ir27
+ar8 = (ar5 + ar6)
+ar5 = (ar2 * ar8)
+ar6 = (ar4 + ar5)
+ar4 clip ar6, 0.0, 0dbfs
+ar5 = (ar4 * 0.8)
+arl0 = ar5
+ar4 = (ar3 * ar1)
+ar1 = (ar0 + ar7)
+ar0 = (ar2 * ar1)
+ar1 = (ar4 + ar0)
 ar0 clip ar1, 0.0, 0dbfs
 ar1 = (ar0 * 0.8)
 arl1 = ar1

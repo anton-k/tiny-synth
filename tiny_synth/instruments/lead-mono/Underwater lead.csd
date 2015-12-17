@@ -104,120 +104,123 @@ endin
 instr 18
 kr0 chnget "volume"
 ar0 upsamp kr0
-ir3 = girgg2
-kr0 TabQueue2_HasElements ir3
-if (kr0 == 1.0) then
-    kr1, kr2 TabQueue2_ReadLastElement ir3
-    ar1 upsamp kr1
+kr0 chnget "fx"
+kr1 chnget "cut-off"
+kr2 chnget "resonance"
+ir9 = girgg2
+kr3 TabQueue2_HasElements ir9
+if (kr3 == 1.0) then
+    kr4, kr5 TabQueue2_ReadLastElement ir9
+    ar1 upsamp kr4
     gargg0 = ar1
-    kr1, kr3 TabQueue2_ReadLastElement ir3
-    ar1 upsamp kr3
+    kr4, kr6 TabQueue2_ReadLastElement ir9
+    ar1 upsamp kr6
     gargg1 = ar1
 endif
-if (kr0 != 1.0) then
+if (kr3 != 1.0) then
     gargg1 = 0.0
 endif
 ar1 = gargg0
 ar2 = gargg1
-ir28 = 1.0
-ir29 = rnd(ir28)
-ir31 = rnd(ir28)
-ir33 = rnd(ir28)
-ir35 = rnd(ir28)
-ir37 = rnd(ir28)
-ir39 = rnd(ir28)
-ir41 = 0.0
-ar3 noise ir28, ir41
+ir34 = 1.0
+ir35 = rnd(ir34)
+ir37 = rnd(ir34)
+ir39 = rnd(ir34)
+ir41 = rnd(ir34)
+ir43 = rnd(ir34)
+ir45 = rnd(ir34)
+ir47 = 0.0
+ar3 noise ir34, ir47
 ar4 delayr 1.2
-ir46 = 3.75
-ar5 oscil3 ir28, ir46, 2
+ir52 = 3.75
+ar5 oscil3 ir34, ir52, 2
 ar6 = (2.1000000000000003e-3 * ar5)
 ar5 = (ar6 + 1.0e-2)
 ar6 deltap3 ar5
 ar7 = (1.0 * ar0)
-kr3 downsamp ar2
-kr4 portk kr3, 1.0e-2
-ar0 upsamp kr4
-if (kr0 == 1.0) then
-    kr3 = 1.0
+kr6 downsamp ar2
+kr7 portk kr6, 1.0e-2
+ar0 upsamp kr7
+if (kr3 == 1.0) then
+    kr6 = 1.0
 else
-    kr3 = 0.0
+    kr6 = 0.0
 endif
-kr0 portk kr3, 0.1
-ar2 upsamp kr0
+kr3 portk kr6, 0.1
+ar2 upsamp kr3
 ar8 = (ar0 * ar2)
 ar0 = (ar8 / 64.0)
 ar2 = (ar0 ^ 2.0)
 ar0 = (ar2 / 2.0)
-kr0 linseg 0.0, 0.85, 1.0, 1.0, 1.0
-ar2 upsamp kr0
-kr0 linsegr 1.0, 1.0, 1.0, 0.95, 0.0
-ar8 upsamp kr0
+kr3 linseg 0.0, 0.85, 1.0, 1.0, 1.0
+ar2 upsamp kr3
+kr3 linsegr 1.0, 1.0, 1.0, 0.95, 0.0
+ar8 upsamp kr3
 ar9 = (ar2 * ar8)
-ir64 = 2400.0
-ir65 = 0.1
-ar2 bqrez ar3, ir64, ir65
+ir70 = 2400.0
+ir71 = 0.1
+ar2 bqrez ar3, ir70, ir71
 ar3 = (0.35 * ar2)
-kr0 downsamp ar1
-kr3 portk kr0, 1.0e-2
-kr0 = cpsmidinn(kr3)
-kr3 oscil3 ir28, ir65, 4
-kr4 = (5.0e-2 * kr3)
-kr3 = (0.35 + kr4)
-kr4 oscil3 ir28, kr3, 4
-kr3 = (5.0e-3 * kr4)
-kr5 = (1.0 + kr3)
-kr3 = (kr0 * kr5)
-ir78 = 50.0
-kr5 = cent(ir78)
-kr6 = (kr5 * -1.0)
-kr7 = (kr3 + kr6)
-kr8 vco2ft kr7, 4
-ar1 oscilikt ir28, kr7, kr8, ir29
-kr7 vco2ft kr3, 4
-ar2 oscilikt ir28, kr3, kr7, ir31
+kr3 downsamp ar1
+kr6 portk kr3, 1.0e-2
+kr3 = cpsmidinn(kr6)
+kr6 oscil3 ir34, ir71, 4
+kr7 = (5.0e-2 * kr6)
+kr6 = (0.35 + kr7)
+kr7 oscil3 ir34, kr6, 4
+kr6 = (5.0e-3 * kr7)
+kr8 = (1.0 + kr6)
+kr6 = (kr3 * kr8)
+ir84 = 50.0
+kr8 = cent(ir84)
+kr9 = (kr8 * -1.0)
+kr10 = (kr6 + kr9)
+kr11 vco2ft kr10, 4
+ar1 oscilikt ir34, kr10, kr11, ir35
+kr10 vco2ft kr6, 4
+ar2 oscilikt ir34, kr6, kr10, ir37
 ar8 = (ar1 + ar2)
-kr7 = (kr5 * 1.0)
-kr5 = (kr3 + kr7)
-kr3 vco2ft kr5, 4
-ar1 oscilikt ir28, kr5, kr3, ir33
+kr10 = (kr8 * 1.0)
+kr8 = (kr6 + kr10)
+kr6 vco2ft kr8, 4
+ar1 oscilikt ir34, kr8, kr6, ir39
 ar2 = (ar8 + ar1)
 ar1 = (ar2 / 3.0)
-ir93 = 14.0
-kr3 = cent(ir93)
-kr5 = (kr0 * kr3)
-ir96 = 0.14
-kr0 oscil3 ir28, ir96, 4
-kr3 = (4.3e-2 * kr0)
-kr0 = (0.22 + kr3)
-kr3 oscil3 ir28, kr0, 4
-kr0 = (7.0e-3 * kr3)
-kr8 = (1.0 + kr0)
-kr0 = (kr5 * kr8)
-kr5 = (kr0 + kr6)
-kr6 vco2ft kr5, 4
-ar2 oscilikt ir28, kr5, kr6, ir35
-kr5 vco2ft kr0, 4
-ar8 oscilikt ir28, kr0, kr5, ir37
+ir99 = 14.0
+kr6 = cent(ir99)
+kr8 = (kr3 * kr6)
+ir102 = 0.14
+kr3 oscil3 ir34, ir102, 4
+kr6 = (4.3e-2 * kr3)
+kr3 = (0.22 + kr6)
+kr6 oscil3 ir34, kr3, 4
+kr3 = (7.0e-3 * kr6)
+kr11 = (1.0 + kr3)
+kr3 = (kr8 * kr11)
+kr8 = (kr3 + kr9)
+kr9 vco2ft kr8, 4
+ar2 oscilikt ir34, kr8, kr9, ir41
+kr8 vco2ft kr3, 4
+ar8 oscilikt ir34, kr3, kr8, ir43
 ar10 = (ar2 + ar8)
-kr5 = (kr0 + kr7)
-kr0 vco2ft kr5, 4
-ar2 oscilikt ir28, kr5, kr0, ir39
+kr8 = (kr3 + kr10)
+kr3 vco2ft kr8, 4
+ar2 oscilikt ir34, kr8, kr3, ir45
 ar8 = (ar10 + ar2)
 ar2 = (ar8 / 3.0)
 ar8 = (ar1 + ar2)
 ar1 = (ar3 + ar8)
-kr0 = (0.18 * kr4)
-kr4 = (1.0 + kr0)
-kr0 = (1575.0 * kr4)
-ir120 = 0.26
-ar2 moogladder ar1, kr0, ir120
-ar1 moogladder ar2, kr0, ir120
-kr0 = (0.13 * kr3)
-kr3 = (1.0 + kr0)
-kr0 = (2075.0 * kr3)
-ir126 = 0.32
-ar2 moogladder ar8, kr0, ir126
+kr3 = (0.18 * kr7)
+kr7 = (1.0 + kr3)
+kr3 = (1575.0 * kr7)
+ir126 = 0.26
+ar2 moogladder ar1, kr3, ir126
+ar1 moogladder ar2, kr3, ir126
+kr3 = (0.13 * kr6)
+kr6 = (1.0 + kr3)
+kr3 = (2075.0 * kr6)
+ir132 = 0.32
+ar2 moogladder ar8, kr3, ir132
 ar3 = (ar1 + ar2)
 ar1 = (ar9 * ar3)
 ar2 = (ar0 * ar1)
@@ -227,18 +230,18 @@ ar1 delayr 1.2
 ar2 deltap3 ar5
  delayw ar0
 ar3 delayr 0.25
-ir142 = 0.25
-ar5 deltap3 ir142
+ir148 = 0.25
+ar5 deltap3 ir148
 ar7 = (0.75 * ar0)
-ar8 ntrpol ar0, ar6, ir28
+ar8 ntrpol ar0, ar6, ir34
 ar6 = (0.25 * ar8)
 ar8 = (ar7 + ar6)
 ar6 = (0.65 * ar5)
 ar9 = (ar8 + ar6)
  delayw ar9
 ar6 delayr 0.25
-ar9 deltap3 ir142
-ar10 ntrpol ar0, ar2, ir28
+ar9 deltap3 ir148
+ar10 ntrpol ar0, ar2, ir34
 ar0 = (0.25 * ar10)
 ar2 = (ar7 + ar0)
 ar0 = (0.65 * ar9)
@@ -246,33 +249,36 @@ ar7 = (ar2 + ar0)
  delayw ar7
 arl0 init 0.0
 arl1 init 0.0
-ar0 = (0.75 * ar8)
-ar7 = (ar5 * 1.0)
-ar5 = (ar8 + ar7)
-ar7 = (0.25 * ar5)
-ar5 = (ar0 + ar7)
-ar0 = (0.65 * ar5)
-ar7 = (0.75 * ar2)
-ar8 = (ar9 * 1.0)
-ar9 = (ar2 + ar8)
+kr3 portk kr0, ir71
+ar0 upsamp kr3
+ar7 = (1.0 - ar0)
+ar10 = (0.75 * ar8)
+ar11 = (ar5 * 1.0)
+ar5 = (ar8 + ar11)
+ar8 = (0.25 * ar5)
+ar5 = (ar10 + ar8)
+ar8 = (ar7 * ar5)
+ar10 = (0.75 * ar2)
+ar11 = (ar9 * 1.0)
+ar9 = (ar2 + ar11)
 ar2 = (0.25 * ar9)
-ar8 = (ar7 + ar2)
-ir179 = 0.9
-ir180 = 12000.0
-ar2, ar7 reverbsc ar5, ar8, ir179, ir180
-ar9 = (ar5 + ar2)
-ar2 = (0.35 * ar9)
-ar5 = (ar0 + ar2)
-ar0 clip ar5, 0.0, 0dbfs
-ar2 = (ar0 * 0.8)
-arl0 = ar2
-ar0 = (0.65 * ar8)
-ar2 = (ar8 + ar7)
-ar5 = (0.35 * ar2)
-ar2 = (ar0 + ar5)
-ar0 clip ar2, 0.0, 0dbfs
-ar2 = (ar0 * 0.8)
-arl1 = ar2
+ar9 = (ar10 + ar2)
+ir187 = 0.9
+ir188 = 12000.0
+ar2, ar10 reverbsc ar5, ar9, ir187, ir188
+ar11 = (ar5 + ar2)
+ar2 = (ar0 * ar11)
+ar5 = (ar8 + ar2)
+ar2 clip ar5, 0.0, 0dbfs
+ar5 = (ar2 * 0.8)
+arl0 = ar5
+ar2 = (ar7 * ar9)
+ar5 = (ar9 + ar10)
+ar7 = (ar0 * ar5)
+ar0 = (ar2 + ar7)
+ar2 clip ar0, 0.0, 0dbfs
+ar0 = (ar2 * 0.8)
+arl1 = ar0
 ar0 = arl0
 ar2 = arl1
  outs ar0, ar2

@@ -56,44 +56,51 @@ endin
 
 instr 19
 kr0 chnget "volume"
+kr1 chnget "fx"
+kr2 chnget "cut-off"
+kr3 chnget "resonance"
 ar0 = gargg0
 ar1 = gargg1
 ar2 delayr 0.25
-ir9 = 0.25
-ar3 deltap3 ir9
+ir15 = 0.25
+ar3 deltap3 ir15
 ar4 = (0.55 * ar3)
 ar5 = (ar0 + ar4)
  delayw ar5
 ar4 delayr 0.25
-ar5 deltap3 ir9
+ar5 deltap3 ir15
 ar6 = (0.55 * ar5)
 ar7 = (ar1 + ar6)
  delayw ar7
 arl0 init 0.0
 arl1 init 0.0
-ar6 = (0.75 * ar0)
-ar7 = (0.65 * ar0)
-ar8 = (ar3 * 1.0)
-ar3 = (ar0 + ar8)
+ir34 = 0.1
+kr4 portk kr1, ir34
+ar6 upsamp kr4
+ar7 = (1.0 - ar6)
+ar8 = (ar7 * ar0)
+ar9 = (0.65 * ar0)
+ar10 = (ar3 * 1.0)
+ar3 = (ar0 + ar10)
 ar0 = (0.35 * ar3)
-ar3 = (ar7 + ar0)
+ar3 = (ar9 + ar0)
 ar0 = (0.65 * ar1)
-ar7 = (ar5 * 1.0)
-ar5 = (ar1 + ar7)
-ar7 = (0.35 * ar5)
-ar5 = (ar0 + ar7)
-ir39 = 0.9
-ir40 = 12000.0
-ar0, ar7 reverbsc ar3, ar5, ir39, ir40
-ar8 = (ar3 + ar0)
-ar0 = (0.25 * ar8)
-ar3 = (ar6 + ar0)
+ar9 = (ar5 * 1.0)
+ar5 = (ar1 + ar9)
+ar9 = (0.35 * ar5)
+ar5 = (ar0 + ar9)
+ir48 = 0.9
+ir49 = 12000.0
+ar0, ar9 reverbsc ar3, ar5, ir48, ir49
+ar10 = (ar3 + ar0)
+ar0 = (ar6 * ar10)
+ar3 = (ar8 + ar0)
 ar0 clip ar3, 0.0, 0dbfs
 ar3 = (ar0 * 0.8)
 arl0 = ar3
-ar0 = (0.75 * ar1)
-ar1 = (ar5 + ar7)
-ar3 = (0.25 * ar1)
+ar0 = (ar7 * ar1)
+ar1 = (ar5 + ar9)
+ar3 = (ar6 * ar1)
 ar1 = (ar0 + ar3)
 ar0 clip ar1, 0.0, 0dbfs
 ar1 = (ar0 * 0.8)

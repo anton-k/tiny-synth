@@ -104,172 +104,178 @@ endin
 instr 18
 kr0 chnget "volume"
 ar0 upsamp kr0
-ir3 = girgg2
-kr0 TabQueue2_HasElements ir3
-if (kr0 == 1.0) then
-    kr1, kr2 TabQueue2_ReadLastElement ir3
-    ar1 upsamp kr1
+kr0 chnget "fx"
+kr1 chnget "cut-off"
+kr2 chnget "resonance"
+ir9 = girgg2
+kr3 TabQueue2_HasElements ir9
+if (kr3 == 1.0) then
+    kr4, kr5 TabQueue2_ReadLastElement ir9
+    ar1 upsamp kr4
     gargg0 = ar1
-    kr1, kr3 TabQueue2_ReadLastElement ir3
-    ar1 upsamp kr3
+    kr4, kr6 TabQueue2_ReadLastElement ir9
+    ar1 upsamp kr6
     gargg1 = ar1
 endif
-if (kr0 != 1.0) then
+if (kr3 != 1.0) then
     gargg1 = 0.0
 endif
 ar1 = gargg0
 ar2 = gargg1
 arl0 init 0.0
 arl1 init 0.0
-ar3 = (1.0 * ar0)
-kr3 downsamp ar2
-kr4 portk kr3, 1.0e-2
-ar0 upsamp kr4
-if (kr0 == 1.0) then
-    kr3 = 1.0
+ir38 = 0.1
+kr6 portk kr0, ir38
+ar3 upsamp kr6
+ar4 = (1.0 - ar3)
+ar5 = (1.0 * ar0)
+kr0 downsamp ar2
+kr6 portk kr0, 1.0e-2
+ar0 upsamp kr6
+if (kr3 == 1.0) then
+    kr0 = 1.0
 else
-    kr3 = 0.0
+    kr0 = 0.0
 endif
-kr0 portk kr3, 0.1
-ar2 upsamp kr0
-ar4 = (ar0 * ar2)
-ar0 = (ar4 / 64.0)
+kr3 portk kr0, 0.1
+ar2 upsamp kr3
+ar6 = (ar0 * ar2)
+ar0 = (ar6 / 64.0)
 ar2 = (ar0 ^ 2.0)
 ar0 = (ar2 / 2.0)
 kr0 linseg 0.0, 0.65, 1.0, 1.0, 1.0
 ar2 upsamp kr0
 kr0 linsegr 1.0, 1.0, 1.0, 1.0, 0.0
-ar4 upsamp kr0
-ar5 = (ar2 * ar4)
-ir44 = 1.0
-ar2 linen ir44, 0.5, 13.0, 10.0
+ar6 upsamp kr0
+ar7 = (ar2 * ar6)
+ir53 = 1.0
+ar2 linen ir53, 0.5, 13.0, 10.0
 kr0 downsamp ar1
 kr3 portk kr0, 1.0e-2
 kr0 = cpsmidinn(kr3)
 ar1 upsamp kr0
 kr3 = (kr0 + -1.0)
-ir50 = 2.0
-kr4 oscil3 ir44, ir50, 2
-ar4 upsamp kr4
-kr5 = (kr3 + kr4)
-kr3 vco2ft kr5, 0
-ar6 oscilikt ir44, kr5, kr3
-ar7 = (ar2 * ar6)
-kr3 linseg 1.0, 13.0, 0.0, 1.0, 0.0
-ir57 = 10.0
-ar6 areson ar7, kr3, ir57, 1.0
-kr5 = (kr0 + 0.5)
-kr6 vco2ft kr5, 0
-ar7 oscilikt ir44, kr5, kr6
-ar8 = (ar2 * ar7)
-ir63 = 40.0
-ar7 areson ar8, kr3, ir63, 1.0
-ar8 = (ar6 + ar7)
-ar6 = (ar1 + 2.0)
-ar7 = (ar6 + ar4)
-ar6 oscil ir44, ar7, 4
-ar7 = (ar2 * ar6)
-ir70 = 60.0
-ar6 areson ar7, kr3, ir70, 1.0
-ar7 = (ar8 + ar6)
-ar6 = (ar1 + 1.5)
-ar8 = (ar6 + ar4)
-ar4 oscil ir44, ar8, 4
-ar6 = (ar2 * ar4)
-ir77 = 80.0
-ar4 areson ar6, kr3, ir77, 1.0
-ar6 = (ar7 + ar4)
-ar4 = (ar1 + -0.25)
-ar7 oscil ir44, ar4, 4
-ar4 = (ar2 * ar7)
-ir83 = 50.0
-ar7 areson ar4, kr3, ir83, 1.0
-ar4 = (ar6 + ar7)
-ar6 = (ar4 / 5.5)
-kr5 = (kr0 + -0.8)
-kr6 oscil3 ir44, ir50, 2
-kr7 = (0.5 * kr6)
-ar4 upsamp kr7
-kr6 = (kr5 + kr7)
-kr5 vco2ft kr6, 0
-ar7 oscilikt ir44, kr6, kr5
-ar8 = (ar2 * ar7)
-ir94 = 70.0
-ar7 areson ar8, kr3, ir94, 1.0
-ar8 = (ar1 + 0.8)
-ar9 = (ar8 + ar4)
-ar8 oscil ir44, ar9, 4
+ir59 = 2.0
+kr6 oscil3 ir53, ir59, 2
+ar6 upsamp kr6
+kr7 = (kr3 + kr6)
+kr3 vco2ft kr7, 0
+ar8 oscilikt ir53, kr7, kr3
 ar9 = (ar2 * ar8)
-ar8 areson ar9, kr3, ir77, 1.0
-ar9 = (ar7 + ar8)
-ar7 = (0.5 * ar9)
-ar8 = (ar6 + ar7)
-ar6 = (0.5 * ar8)
-ar8 = (ar5 * ar6)
-ar6 = (ar0 * ar8)
-ir107 = 0.1
-kr5 oscil3 ir44, ir107, 2
-kr6 = (0.5 * kr5)
-kr5 = (0.5 + kr6)
-kr6 = (2000.0 * kr5)
-kr5 = (3500.0 + kr6)
-ar8 moogladder ar6, kr5, ir107
-ar6 = (0.9 * ar8)
-ar8 = (ar3 * ar6)
-ar6 = (0.65 * ar8)
-ar9 = (ar1 + 1.0)
-ar10 = (ar9 + ar4)
-ar4 oscil ir44, ar10, 4
-ar9 = (ar2 * ar4)
-kr6 = (kr3 * kr4)
-ir122 = 20.0
-ar4 areson ar9, kr6, ir122, 1.0
-ar9 = (ar1 + -0.5)
-ar1 oscil ir44, ar9, 4
-ar9 = (ar2 * ar1)
-ir127 = 30.0
-ar1 areson ar9, kr3, ir127, 1.0
-ar9 = (ar4 + ar1)
-kr6 = (kr0 + -2.0)
-kr8 = (kr6 + kr7)
-kr6 vco2ft kr8, 0
-ar1 oscilikt ir44, kr8, kr6
-ar4 = (ar2 * ar1)
-ar1 areson ar4, kr3, ir83, 1.0
-ar4 = (ar9 + ar1)
-kr6 = (kr0 + -1.5)
-kr7 = (kr6 + kr4)
-kr4 vco2ft kr7, 0
-ar1 oscilikt ir44, kr7, kr4
-ar9 = (ar2 * ar1)
-ar1 areson ar9, kr3, ir94, 1.0
-ar9 = (ar4 + ar1)
-kr4 = (kr0 + 0.25)
-kr0 vco2ft kr4, 0
-ar1 oscilikt ir44, kr4, kr0
-ar4 = (ar2 * ar1)
-ar1 areson ar4, kr3, ir70, 1.0
-ar2 = (ar9 + ar1)
+kr3 linseg 1.0, 13.0, 0.0, 1.0, 0.0
+ir66 = 10.0
+ar8 areson ar9, kr3, ir66, 1.0
+kr7 = (kr0 + 0.5)
+kr8 vco2ft kr7, 0
+ar9 oscilikt ir53, kr7, kr8
+ar10 = (ar2 * ar9)
+ir72 = 40.0
+ar9 areson ar10, kr3, ir72, 1.0
+ar10 = (ar8 + ar9)
+ar8 = (ar1 + 2.0)
+ar9 = (ar8 + ar6)
+ar8 oscil ir53, ar9, 4
+ar9 = (ar2 * ar8)
+ir79 = 60.0
+ar8 areson ar9, kr3, ir79, 1.0
+ar9 = (ar10 + ar8)
+ar8 = (ar1 + 1.5)
+ar10 = (ar8 + ar6)
+ar6 oscil ir53, ar10, 4
+ar8 = (ar2 * ar6)
+ir86 = 80.0
+ar6 areson ar8, kr3, ir86, 1.0
+ar8 = (ar9 + ar6)
+ar6 = (ar1 + -0.25)
+ar9 oscil ir53, ar6, 4
+ar6 = (ar2 * ar9)
+ir92 = 50.0
+ar9 areson ar6, kr3, ir92, 1.0
+ar6 = (ar8 + ar9)
+ar8 = (ar6 / 5.5)
+kr7 = (kr0 + -0.8)
+kr8 oscil3 ir53, ir59, 2
+kr9 = (0.5 * kr8)
+ar6 upsamp kr9
+kr8 = (kr7 + kr9)
+kr7 vco2ft kr8, 0
+ar9 oscilikt ir53, kr8, kr7
+ar10 = (ar2 * ar9)
+ir103 = 70.0
+ar9 areson ar10, kr3, ir103, 1.0
+ar10 = (ar1 + 0.8)
+ar11 = (ar10 + ar6)
+ar10 oscil ir53, ar11, 4
+ar11 = (ar2 * ar10)
+ar10 areson ar11, kr3, ir86, 1.0
+ar11 = (ar9 + ar10)
+ar9 = (0.5 * ar11)
+ar10 = (ar8 + ar9)
+ar8 = (0.5 * ar10)
+ar10 = (ar7 * ar8)
+ar8 = (ar0 * ar10)
+kr7 oscil3 ir53, ir38, 2
+kr8 = (0.5 * kr7)
+kr7 = (0.5 + kr8)
+kr8 = (2000.0 * kr7)
+kr7 = (3500.0 + kr8)
+ar10 moogladder ar8, kr7, ir38
+ar8 = (0.9 * ar10)
+ar10 = (ar5 * ar8)
+ar8 = (ar4 * ar10)
+ar11 = (ar1 + 1.0)
+ar12 = (ar11 + ar6)
+ar6 oscil ir53, ar12, 4
+ar11 = (ar2 * ar6)
+kr8 = (kr3 * kr6)
+ir130 = 20.0
+ar6 areson ar11, kr8, ir130, 1.0
+ar11 = (ar1 + -0.5)
+ar1 oscil ir53, ar11, 4
+ar11 = (ar2 * ar1)
+ir135 = 30.0
+ar1 areson ar11, kr3, ir135, 1.0
+ar11 = (ar6 + ar1)
+kr8 = (kr0 + -2.0)
+kr10 = (kr8 + kr9)
+kr8 vco2ft kr10, 0
+ar1 oscilikt ir53, kr10, kr8
+ar6 = (ar2 * ar1)
+ar1 areson ar6, kr3, ir92, 1.0
+ar6 = (ar11 + ar1)
+kr8 = (kr0 + -1.5)
+kr9 = (kr8 + kr6)
+kr6 vco2ft kr9, 0
+ar1 oscilikt ir53, kr9, kr6
+ar11 = (ar2 * ar1)
+ar1 areson ar11, kr3, ir103, 1.0
+ar11 = (ar6 + ar1)
+kr6 = (kr0 + 0.25)
+kr0 vco2ft kr6, 0
+ar1 oscilikt ir53, kr6, kr0
+ar6 = (ar2 * ar1)
+ar1 areson ar6, kr3, ir79, 1.0
+ar2 = (ar11 + ar1)
 ar1 = (ar2 / 5.5)
-ar2 = (ar1 + ar7)
+ar2 = (ar1 + ar9)
 ar1 = (0.5 * ar2)
-ar2 = (ar5 * ar1)
+ar2 = (ar7 * ar1)
 ar1 = (ar0 * ar2)
-ar0 moogladder ar1, kr5, ir107
+ar0 moogladder ar1, kr7, ir38
 ar1 = (0.9 * ar0)
-ar0 = (ar3 * ar1)
-ir158 = 0.8
-ir159 = 12000.0
-ar1, ar2 reverbsc ar8, ar0, ir158, ir159
-ar3 = (ar8 + ar1)
-ar1 = (0.35 * ar3)
-ar3 = (ar6 + ar1)
-ar1 clip ar3, 0.0, 0dbfs
-ar3 = (ar1 * 0.8)
-arl0 = ar3
-ar1 = (0.65 * ar0)
-ar3 = (ar0 + ar2)
-ar0 = (0.35 * ar3)
+ar0 = (ar5 * ar1)
+ir166 = 0.8
+ir167 = 12000.0
+ar1, ar2 reverbsc ar10, ar0, ir166, ir167
+ar5 = (ar10 + ar1)
+ar1 = (ar3 * ar5)
+ar5 = (ar8 + ar1)
+ar1 clip ar5, 0.0, 0dbfs
+ar5 = (ar1 * 0.8)
+arl0 = ar5
+ar1 = (ar4 * ar0)
+ar4 = (ar0 + ar2)
+ar0 = (ar3 * ar4)
 ar2 = (ar1 + ar0)
 ar0 clip ar2, 0.0, 0dbfs
 ar1 = (ar0 * 0.8)

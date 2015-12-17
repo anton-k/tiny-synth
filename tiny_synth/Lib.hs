@@ -264,7 +264,8 @@ getFaders = do
     kfx  <- chnGetCtrl (text "fx")
     cf   <- chnGetCtrl (text "cut-off")
     rz   <- chnGetCtrl (text "resonance")
-    return (vol, kfx, cf, rz)
+    return (vol, f kfx, f cf, f rz)
+    where f = smooth 0.1 
 
 applyParams :: Sig -> Patch a Sig2 -> SE (Patch a Sig2)
 applyParams scale p = do 
@@ -272,5 +273,5 @@ applyParams scale p = do
     return $ mul (scale * vol) $ atMix kfx $ at (mkFilt cf rz) p
 
 mkFilt :: Sig -> Sig -> Sig -> Sig
-mkFilt cf rz x = mlp (50 + 10000 * cf) (rz * 0.95) x
+mkFilt cf rz x = x -- (lp (50 + 15000 * cf) (1 + rz * 20) x)
 

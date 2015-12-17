@@ -102,74 +102,81 @@ endin
 instr 18
 kr0 chnget "volume"
 ar0 upsamp kr0
-ir3 = girgg2
-kr0 TabQueue2_HasElements ir3
-if (kr0 == 1.0) then
-    kr1, kr2 TabQueue2_ReadLastElement ir3
-    ar1 upsamp kr1
+kr0 chnget "fx"
+kr1 chnget "cut-off"
+kr2 chnget "resonance"
+ir9 = girgg2
+kr3 TabQueue2_HasElements ir9
+if (kr3 == 1.0) then
+    kr4, kr5 TabQueue2_ReadLastElement ir9
+    ar1 upsamp kr4
     gargg0 = ar1
-    kr1, kr3 TabQueue2_ReadLastElement ir3
-    ar1 upsamp kr3
+    kr4, kr6 TabQueue2_ReadLastElement ir9
+    ar1 upsamp kr6
     gargg1 = ar1
 endif
-if (kr0 != 1.0) then
+if (kr3 != 1.0) then
     gargg1 = 0.0
 endif
 ar1 = gargg0
 ar2 = gargg1
 arl0 init 0.0
 arl1 init 0.0
-ar3 = (1.0 * ar0)
-kr3 downsamp ar2
-kr4 portk kr3, 1.0e-2
-ar0 upsamp kr4
-if (kr0 == 1.0) then
-    kr3 = 1.0
+ir38 = 0.1
+kr6 portk kr0, ir38
+ar3 upsamp kr6
+ar4 = (1.0 - ar3)
+ar5 = (1.0 * ar0)
+kr0 downsamp ar2
+kr6 portk kr0, 1.0e-2
+ar0 upsamp kr6
+if (kr3 == 1.0) then
+    kr0 = 1.0
 else
-    kr3 = 0.0
+    kr0 = 0.0
 endif
-kr0 portk kr3, 0.1
-ar2 upsamp kr0
-ar4 = (ar0 * ar2)
-ar0 = (ar4 / 64.0)
+kr3 portk kr0, 0.1
+ar2 upsamp kr3
+ar6 = (ar0 * ar2)
+ar0 = (ar6 / 64.0)
 ar2 = (ar0 ^ 2.0)
 ar0 = (ar2 / 2.0)
 kr0 linsegr 1.0, 1.0, 1.0, 1.0, 0.0
 ar2 upsamp kr0
 kr0 linseg 0.0, 0.5, 1.0, 1.0, 1.0
-ar4 upsamp kr0
-ir43 = 1.0
+ar6 upsamp kr0
+ir52 = 1.0
 kr0 downsamp ar1
 kr3 portk kr0, 1.0e-2
 kr0 = cpsmidinn(kr3)
 kr3 = (-0.1 + kr0)
-ar1 poscil ir43, kr3, 2
+ar1 poscil ir52, kr3, 2
 kr3 = (-3.333333333333334e-2 + kr0)
-ar5 poscil ir43, kr3, 2
-ar6 = (ar1 + ar5)
+ar7 poscil ir52, kr3, 2
+ar8 = (ar1 + ar7)
 kr3 = (3.3333333333333326e-2 + kr0)
-ar1 poscil ir43, kr3, 2
-ar5 = (ar6 + ar1)
-ar1 = (ar5 / 3.0)
-ir56 = 1200.0
-ar5 butlp ar1, ir56
-ar1 = (ar4 * ar5)
-ar4 = (ar2 * ar1)
-ar1 = (ar0 * ar4)
+ar1 poscil ir52, kr3, 2
+ar7 = (ar8 + ar1)
+ar1 = (ar7 / 3.0)
+ir65 = 1200.0
+ar7 butlp ar1, ir65
+ar1 = (ar6 * ar7)
+ar6 = (ar2 * ar1)
+ar1 = (ar0 * ar6)
 ar0 = (0.48 * ar1)
-ar1 = (ar3 * ar0)
-ar0 = (0.75 * ar1)
-ir64 = 0.9
-ir65 = 12000.0
-ar2, ar3 reverbsc ar1, ar1, ir64, ir65
-ar4 = (ar1 + ar2)
-ar2 = (0.25 * ar4)
-ar4 = (ar0 + ar2)
-ar2 clip ar4, 0.0, 0dbfs
-ar4 = (ar2 * 0.8)
-arl0 = ar4
-ar2 = (ar1 + ar3)
-ar1 = (0.25 * ar2)
+ar1 = (ar5 * ar0)
+ar0 = (ar4 * ar1)
+ir73 = 0.9
+ir74 = 12000.0
+ar2, ar4 reverbsc ar1, ar1, ir73, ir74
+ar5 = (ar1 + ar2)
+ar2 = (ar3 * ar5)
+ar5 = (ar0 + ar2)
+ar2 clip ar5, 0.0, 0dbfs
+ar5 = (ar2 * 0.8)
+arl0 = ar5
+ar2 = (ar1 + ar4)
+ar1 = (ar3 * ar2)
 ar2 = (ar0 + ar1)
 ar0 clip ar2, 0.0, 0dbfs
 ar1 = (ar0 * 0.8)
