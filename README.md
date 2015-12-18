@@ -7,7 +7,7 @@ the library csound-expression. It's implemented in Haskell
 The UI part is made wxPython. It's just a prototype so some parts
 are not implemented yet (filtering and custom temperaments).
 
-![pic](pic/tiny-synth-pic.png)
+![pic](pic/synth-pic.png)
 
 Installation
 -------------------
