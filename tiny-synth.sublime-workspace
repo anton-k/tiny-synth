@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"getInstr",
+				"getInstrumentPath"
+			],
+			[
 				"tu",
 				"tuningId"
 			],
@@ -510,10 +514,6 @@
 			[
 				"ren",
 				"renderGraph"
-			],
-			[
-				"mul",
-				"multiRndSE"
 			]
 		]
 	},
@@ -523,7 +523,7 @@
 			"file": "tiny_synth/main.py",
 			"settings":
 			{
-				"buffer_size": 16158,
+				"buffer_size": 16133,
 				"line_ending": "Unix"
 			}
 		},
@@ -532,6 +532,14 @@
 			"settings":
 			{
 				"buffer_size": 1937,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "README.md",
+			"settings":
+			{
+				"buffer_size": 994,
 				"line_ending": "Unix"
 			}
 		},
@@ -563,7 +571,7 @@
 			"file": "tiny_synth/inits.py",
 			"settings":
 			{
-				"buffer_size": 490,
+				"buffer_size": 574,
 				"line_ending": "Unix"
 			}
 		},
@@ -571,7 +579,37 @@
 			"file": "tiny_synth/Lib.hs",
 			"settings":
 			{
-				"buffer_size": 10729,
+				"buffer_size": 11233,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "Package Control Messages\n========================\n\nPlainTasks\n----------\n\n  Thank you for installing PlainTasks.\n  \n  For quick start you probably would like to go through a short tutorial:\n  Preferences → Package Settings → PlainTasks → Tutorial\n",
+			"settings":
+			{
+				"buffer_size": 247,
+				"line_ending": "Unix",
+				"name": "Package Control Messages",
+				"read_only": true,
+				"scratch": true
+			}
+		},
+		{
+			"contents": "How to Use PlainTasks:\n\nProjects:\n ☐ Anything with colon at the end of the line is a project title\n ☐ Projects can be nested inside each other\n ☐ Projects can be folded (a built-in editor feature)\n\nTasks:\n  You can write plain text as _notes_ or descriptions wherever you want;\n  ✔ It’s **totally** fine! @done (15-12-18 12:34)\n  ✔  @done (15-12-18 12:34)\n  ☐ \n  ☐ dff\n  ☐ \n  New:\n   ☐ ⌘+enter (ctrl+enter on Windows) adds a new task.\n   ☐ ⌘+i (ctrl+i on Windows) also adds a new task\n   ☐ If you’re on a new line PlainTasks creates a new task on the current line\n   ☐ If you’re on a line with a task pressing new task shortcut adds a task after it\n   ☐ If you’re on a line with some normal text pressing new task shortcut converts it to a task\n   ☐ New tasks are nested as much as the task on the previous line\n  Done:\n   ☐ ⌘+d (ctrl+d on Windows) marks a task as done\n   ☐ Pressing ⌘+d (ctrl+d on Windows) again puts it back in pending mode\n   ☐ ctrl+c (alt+c on Windows) marks the task as cancelled\n  Tagging:\n   ☐ You can add tags using @ sign, like this @tag\n  URLs:\n   ☐ ⌘+shift+U (ctrl+shift+U on Windows) opens the URL under the cursor in your default browser\n     www.github.com or <skype:nickname>\n  File links:\n   ☐ You can create a link to a file by prefixing the file name with a dot and (back)slash sign\n     like: .\\filename\\ or ./another filename/\n     It supports only one filename per line\n     Filename can be absolute path or relative one (to project folder(s) or to open files)\n   ☐ The line and column numbers can be specified by colons after the filename: .\\filename:11:8\n   ☐ In SublimeText 3 you can specify a symbol inside the file by using > character like: .\\filename>symbol\n   ☐ In SublimeText 2 you can specify a text inside that file by using double quotes like: .\\filename\"any text\"\n   ☐ ctrl+o (alt+o on Windows) opens the file in Sublime: try to open .\\install.txt\\\n   ☐ Other ways to create file links:\n      [](install.txt)  ← try to open it\n      [](path \":11:8\")\n      [](path \">symbol\")\n      [](path \"any text\")\n      [[..\\PlainTasks.py]]  ← try to open it\n      [[path::11:8]]\n      [[path::*symbol]]\n      [[path::any text]]\n      [[path]] \":11:8\"\n      [[path]] \">symbol\"\n      [[path]] \"any text\"\n\n  Archiving:\n   ☐ ⌘+shift+A (ctrl+shift+A on Windows) archives tasks in done mode.\n      It does it by removing them from your list and appending them to the bottom of the file under Archive project.\n      The archive project is separated from the other list of projects with a line. See bottom of this file.\n   ☐ ⌘+shift+O (ctrl+shift+O) will archive in Org-Mode style.\n      Removing the entire subtree after cursor and appending it to new file next to original one,\n      e.g. filename.TODO → filename_archive.TODO\n\n  Starting a new todo-list:\n   ☐ Bring up the command palette (it's ⌘+shift+p in Mac and ctrl+shift+p in Windows)\n   ☐ type `task` and select `Tasks: New document` command\n\n--- ✄ -----------------------\nYou can use separator snippet to separate your todo lists, type -- and press tab\n\nPriority:\n  ☐ type c, press tab key — it’ll become @critical\n  ☐ type h, press tab key — it’ll become @high\n  ☐ type l, press tab key — it’ll become @low\n  ☐ type t, press tab key — it’ll become @today\n\nTime Tracking:\n  ☐ type s, press tab key twice — it’ll become @started(13-10-25 15:20)\n    You’ll get a current date and time; When a task with such tag is completed/cancelled,\n    PlainTasks will calculate the time spent on that task and append it to the archived task.\n  ☐ type tg, press tab key twice — @toggle(14-10-13 16:14)\n    That way you can pause and resume started task, so result of calculation will be more correct.\n    First, you need start task, then toggle means pause, next toggle — resume, etc.\n  ☐ type cr, press tab key twice — @created(14-12-24 15:57)\n  ☐ type d, press tab key — @due( )\n    If you press tab key again — it’ll insert current date, same for @due( 0).\n    You can type short date and then press tab to expand it into default format.\n    Short date should be __@due(year-month-day hour:minute)__\n    Dot can be used instead of hyphen, but should be consistent _year.month.day_\n      - year, month, minute, hour can be omitted:\n        - @due(1)          → 1st day of next month always\n        - @due(5)          → 5th day of current month (or next month if current day is 5th or older)\n        - @due(2-3)        → February 3rd of current year or next one\n        - @due(31 23:)     → 31st day of current/next month at 23 hours and minutes are equal to current moment\n        - @due(16.1.1 1:1) → January 1st of 2016 at 01:01 @due(16-01-01 01:01)\n      - relative period of time starts with a plus sign or two\n        __+[+][number][DdWw][h:m]__ — number is optional as well as letter d for days or letter w for weeks\n        - @due(+)   → tomorrow as well as @due( +1) or @due( +1d)\n        - @due(+w)  = @due( +7)\n        - @due(+3w) = @due( +21d)\n        - @due(++)  → count time since date of creation if task contains @created(date), otherwise it is equal to @due(+)\n        - @due(+2:)    = @due( +2.)    →  two hours since current date\n        - @due(+:555)  = @due( +.555)  →  555 minutes since current date\n        - @due(+2 12:) = @due( +2 12.) →  2 days and 12 hours since current date\n\n☐ ctrl+space shows list of those tags\n\nFileType Support:\n PlainTasks support these file types out of the box\n ☐ TODO\n ☐ *.todo\n ☐ *.todolist\n ☐ *.taskpaper\n ☐ *.tasks \n\nYou can customize:\n ☐ New and done bullets\n ☐ List of file-types that should be considered todo lists\n ☐ Key-bindings if you don’t like the default ones\n ☐ Date formating for done tasks\n ☐ Icon for file-type\n ☐ Colour scheme\n ☐ Statistics appearance\n ☐ and more\n See the Readme file on github on how to do these customizations. https://github.com/aziz/PlainTasks\n or in Sublime ./../Readme.md\"## Settings\"\n\nEditor Useful Tools:\n ☐ Use ⌘+control+up/down (ctrl+shift+up/down on Windows) to move tasks up and down.\n ☐ Use ⌘+R (ctrl+R on Windows) to see a list of projects and quickly jump between them\n ☐ F6 toggles spell check\n\n＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿\nArchive:\n ✔ learn how to use PlainTasks @done (12-09-07 07:30)\n",
+			"file": "/home/anton/.config/sublime-text-3/Packages/PlainTasks/messages/Tutorial.todo",
+			"file_size": 6340,
+			"file_write_time": 130949047637147371,
+			"settings":
+			{
+				"buffer_size": 6160,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "tiny_synth/instruments/choir/Choir U.csd",
+			"settings":
+			{
+				"buffer_size": 50517,
 				"line_ending": "Unix"
 			}
 		},
@@ -631,6 +669,14 @@
 		"selected_items":
 		[
 			[
+				"task",
+				"Tasks: New"
+			],
+			[
+				"PI",
+				"Package Control: Install Package"
+			],
+			[
 				"m",
 				"Markdown Preview: Preview in Browser"
 			],
@@ -669,10 +715,6 @@
 			[
 				"pi",
 				"Package Control: Install Package"
-			],
-			[
-				"PI",
-				"Package Control: Install Package"
 			]
 		],
 		"width": 449.0
@@ -696,10 +738,13 @@
 	"expanded_folders":
 	[
 		"/home/anton/dev/tiny-synth/src",
-		"/home/anton/dev/tiny-synth/tiny_synth"
+		"/home/anton/dev/tiny-synth/tiny_synth",
+		"/home/anton/dev/tiny-synth/tiny_synth/instruments",
+		"/home/anton/dev/tiny-synth/tiny_synth/instruments/lead-poly"
 	],
 	"file_history":
 	[
+		"/home/anton/job.txt",
 		"/home/anton/x/try_st/try_st/__init__.py",
 		"/home/anton/x/try_st/setup.py",
 		"/home/anton/x/try_st/try_st/main.py",
@@ -826,8 +871,7 @@
 		"/home/anton/dev/csound-expression-typed/src/Csound/Typed/Types/MixSco.hs",
 		"/home/anton/dev/csound-expression-typed/src/Csound/Typed/Control/Osc.hs",
 		"/home/anton/dev/csound-expression-typed/src/Csound/Typed/Lib/StableMaps/Dynamic.hs",
-		"/home/anton/dev/csound-expression-typed/src/Csound/Typed/Lib/StableMaps/Dynamic/Map.hs",
-		"/home/anton/dev/csound-expression-typed/src/Csound/Typed/Gui/BoxModel.hs"
+		"/home/anton/dev/csound-expression-typed/src/Csound/Typed/Lib/StableMaps/Dynamic/Map.hs"
 	],
 	"find":
 	{
@@ -854,6 +898,12 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"kr1",
+			"kr0",
+			"chnget",
+			"kr2",
+			"instrumentsPath",
+			"instrumentPath",
 			"print",
 			"setValue",
 			"setTuni",
@@ -975,13 +1025,7 @@
 			"newGen",
 			"saveGen",
 			"renderTab",
-			"Tab",
-			"SERef",
-			"scrapeDahina",
-			"dreamPad",
-			"choruselm",
-			"overtonePa",
-			"pwPad"
+			"Tab"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1014,7 +1058,7 @@
 	"groups":
 	[
 		{
-			"selected": 6,
+			"selected": 9,
 			"sheets":
 			[
 				{
@@ -1023,15 +1067,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 16158,
+						"buffer_size": 16133,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								6732,
-								6732
+								11240,
+								11240
 							]
 						],
 						"settings":
@@ -1041,10 +1085,10 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 2982.0,
+						"translation.y": 5974.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
@@ -1060,8 +1104,8 @@
 						"selection":
 						[
 							[
-								1137,
-								1137
+								1767,
+								1767
 							]
 						],
 						"settings":
@@ -1071,14 +1115,42 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 14.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "README.md",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 994,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								107,
+								107
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Markdown/Markdown.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 5,
 					"type": "text"
 				},
 				{
-					"buffer": 2,
+					"buffer": 3,
 					"file": "MANIFEST.in",
 					"semi_transient": false,
 					"settings":
@@ -1102,11 +1174,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 13,
 					"type": "text"
 				},
 				{
-					"buffer": 3,
+					"buffer": 4,
 					"file": "tiny_synth/resources/__init__.py",
 					"semi_transient": false,
 					"settings":
@@ -1130,11 +1202,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 8,
+					"stack_index": 7,
 					"type": "text"
 				},
 				{
-					"buffer": 4,
+					"buffer": 5,
 					"file": "tiny_synth/piano.py",
 					"semi_transient": false,
 					"settings":
@@ -1160,24 +1232,24 @@
 						"translation.y": 1384.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 11,
+					"stack_index": 9,
 					"type": "text"
 				},
 				{
-					"buffer": 5,
+					"buffer": 6,
 					"file": "tiny_synth/inits.py",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 490,
+						"buffer_size": 574,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								412,
-								412
+								574,
+								574
 							]
 						],
 						"settings":
@@ -1188,24 +1260,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 6,
 					"type": "text"
 				},
 				{
-					"buffer": 6,
+					"buffer": 7,
 					"file": "tiny_synth/Lib.hs",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 10729,
+						"buffer_size": 11233,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								10604,
-								10604
+								9417,
+								9417
 							]
 						],
 						"settings":
@@ -1214,15 +1286,106 @@
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
-						"translation.x": -0.0,
-						"translation.y": 3927.0,
+						"translation.x": 0.0,
+						"translation.y": 3468.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 247,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								50,
+								50
+							]
+						],
+						"settings":
+						{
+							"auto_indent": false,
+							"default_dir": "/home/anton/dev/tiny-synth/src",
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"tab_width": 2,
+							"word_wrap": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "/home/anton/.config/sublime-text-3/Packages/PlainTasks/messages/Tutorial.todo",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 6160,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3173,
+								3173
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PlainTasks/PlainTasks.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 296.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
 					"type": "text"
 				},
 				{
-					"buffer": 7,
+					"buffer": 10,
+					"file": "tiny_synth/instruments/choir/Choir U.csd",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 50517,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								50278,
+								50278
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 36404.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
+					"type": "text"
+				},
+				{
+					"buffer": 11,
 					"file": "/home/anton/x/try_st/try_st/first.py",
 					"semi_transient": false,
 					"settings":
@@ -1246,11 +1409,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 10,
+					"stack_index": 15,
 					"type": "text"
 				},
 				{
-					"buffer": 8,
+					"buffer": 12,
 					"file": "tiny_synth/player.py",
 					"semi_transient": false,
 					"settings":
@@ -1276,11 +1439,11 @@
 						"translation.y": 357.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 11,
 					"type": "text"
 				},
 				{
-					"buffer": 9,
+					"buffer": 13,
 					"file": "/home/anton/dev/csound-player/Player.py",
 					"semi_transient": false,
 					"settings":
@@ -1306,11 +1469,11 @@
 						"translation.y": 153.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 9,
+					"stack_index": 14,
 					"type": "text"
 				},
 				{
-					"buffer": 10,
+					"buffer": 14,
 					"file": "tiny_synth/faders.py",
 					"semi_transient": false,
 					"settings":
@@ -1332,15 +1495,15 @@
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.x": -0.0,
+						"translation.y": 204.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 10,
 					"type": "text"
 				},
 				{
-					"buffer": 11,
+					"buffer": 15,
 					"file": "tiny_synth/midi.py",
 					"semi_transient": false,
 					"settings":
@@ -1366,11 +1529,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 12,
+					"stack_index": 16,
 					"type": "text"
 				},
 				{
-					"buffer": 12,
+					"buffer": 16,
 					"file": "tiny_synth/utils.py",
 					"semi_transient": false,
 					"settings":
@@ -1396,7 +1559,7 @@
 						"translation.y": 714.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 12,
 					"type": "text"
 				}
 			]
