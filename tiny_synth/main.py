@@ -74,11 +74,11 @@ class St():
         self.fontSize = max(self.fontSize - 1, 6)
         self.set_font_size(self.fontSize)
 
-    def close(self, recent, favs, tuningId):
+    def close(self, recent, favs, tuning_id):
         self.cfg.Write(config.FADERS_DICT_NAME, faders.Faders.to_string(self.fadersDict))
         self.set_favs(favs)
         self.set_recent(recent) 
-        self.set_tuning(tuningId)       
+        self.set_tuning(tuning_id)       
 
     def get_font(self):
         font = wx.SystemSettings.GetFont(wx.SYS_SYSTEM_FONT)
@@ -156,7 +156,7 @@ class PageOne(wx.Panel):
         vbox = wx.BoxSizer(wx.VERTICAL)
         vbox.Add(tree, 1, wx.EXPAND)
         self.SetSizer(vbox)
-        frame.fontObjects.append_tree(tree)
+        frame.font_objects.append_tree(tree)
 
 def make_recent_tree(panel, frame, recent):    
     return make_tree(frame, panel, map(str, recent.items), frame.on_selector_changed, frame.state.get_font())
@@ -181,7 +181,7 @@ class PageTwo(wx.Panel):
             frame.on_selector_changed(self.tree.GetItemText(item), self.tree.GetItemData(item).GetData())
 
         self.tree.Bind(wx.EVT_TREE_SEL_CHANGED, on_selector_changed, self.tree)
-        frame.fontObjects.append_tree(self.tree)
+        frame.font_objects.append_tree(self.tree)
 
 class Recent():
     def __init__(self, items = [], limit = 12):
@@ -302,13 +302,13 @@ class MyFrame(wx.Frame):
 
         self.recent = state.get_recent()
         self.favs = state.get_favs()
-        self.tuningId = state.get_tuning_id()
-        self.currentTrack = None
+        self.tuning_id = state.get_tuning_id()
+        self.current_track = None
         self.state = state
-        self.fontObjects = FontObjects()
+        self.font_objects = FontObjects()
 
         self.player = Player()
-        self.player.set_tuning(self.tuningId)
+        self.player.set_tuning(self.tuning_id)
 
         vbox = wx.BoxSizer(wx.VERTICAL)
         panel1 = wx.Panel(self, -1)
@@ -338,9 +338,9 @@ class MyFrame(wx.Frame):
         page2 = PageTwo(nb, self, config.RECENT)
         page3 = PageTwo(nb, self, config.FAVS)
 
-        self.recentPanel = page2
-        self.favsPanel   = page3
-        self.currentTab  = 0
+        self.recent_panel = page2
+        self.favs_panel   = page3
+        self.current_tab  = 0
 
 
         # add the pages to the notebook with the label to show on the tab
@@ -361,19 +361,19 @@ class MyFrame(wx.Frame):
         font = state.get_font()
         font.SetWeight(wx.FONTWEIGHT_BOLD)
         self.display.SetFont(font)
-        self.fontObjects.set_title(self.display)
+        self.font_objects.set_title(self.display)
 
         hbox = hor([panel1, panel2])
 
-        self.uiFaders = {}
+        self.ui_faders = {}
 
         def make_slider(name):
             def cbk(val):
                 self.player.setValue(name, val)
             ui = slider(panel2, 0, cbk)            
-            self.uiFaders[name] = ui
+            self.ui_faders[name] = ui
             text = staticText(panel2, name, font = self.state.get_font())
-            self.fontObjects.append_text(text)
+            self.font_objects.append_text(text)
             return ver([Cell(ui, border = 7), Cell(text, flags = wx.ALIGN_CENTRE, border = 7)])
         
         vbox2 = ver([staticText(panel2, ''), make_slider(config.VOLUME), make_slider(config.FX), make_slider(config.CUT_OFF), make_slider(config.RESONANCE)])
@@ -385,7 +385,7 @@ class MyFrame(wx.Frame):
         
         def set_tuning(n):
             def go(evt):
-                self.tuningId = n
+                self.tuning_id = n
                 self.player.set_tuning(n)
             return go
 
@@ -398,7 +398,7 @@ class MyFrame(wx.Frame):
             , menuItem('&Edit', [
                   normalItem('Enlarge font', cbk = self.on_font_up)
                 , normalItem('Shrink  font', cbk = self.on_font_down)
-                , menuItem('Tuning', [ radioItem(name, cbk = set_tuning(i), is_check = self.tuningId == i) for i, name in enumerate(config.TUNINGS) ])
+                , menuItem('Tuning', [ radioItem(name, cbk = set_tuning(i), is_check = self.tuning_id == i) for i, name in enumerate(config.TUNINGS) ])
             ])  
             , menuItem('&Help',[                  
                 normalItem('About', cbk = self.on_about)  
@@ -415,26 +415,26 @@ class MyFrame(wx.Frame):
 
     def on_font_up(self, e):       
         self.state.up_font_size()
-        self.fontObjects.update(self.state.get_font())
+        self.font_objects.update(self.state.get_font())
 
 
     def on_font_down(self, e):        
         self.state.down_font_size()
-        self.fontObjects.update(self.state.get_font())
+        self.font_objects.update(self.state.get_font())
 
     def on_add_to_favs(self, event):
-        if self.currentTrack:
-            self.favs.add(self.currentTrack)
+        if self.current_track:
+            self.favs.add(self.current_track)
 
     def on_remove_frome_favs(self, event):
-        if self.currentTrack:
-            self.favs.remove(self.currentTrack)
+        if self.current_track:
+            self.favs.remove(self.current_track)
         if self.is_favs_tab():
-            fill_tree(self.favsPanel.tree, self.favs.items, config.FAVS, self.state.get_font())
-        self.favsPanel.Refresh()
+            fill_tree(self.favs_panel.tree, self.favs.items, config.FAVS, self.state.get_font())
+        self.favs_panel.Refresh()
 
     def is_favs_tab(self):
-        return self.currentTab == 2
+        return self.current_tab == 2
 
     def on_about(self, e):    
         description = """Tiny synth is a collection of instruments designed with csound-expression library.
@@ -461,13 +461,13 @@ class MyFrame(wx.Frame):
     def on_page_changed(self, event):
         old = event.GetOldSelection()
         new = event.GetSelection()
-        self.currentTab = new
+        self.current_tab = new
 
         if new == 1:
-            fill_tree(self.recentPanel.tree, self.recent.items, config.RECENT, self.state.get_font())
+            fill_tree(self.recent_panel.tree, self.recent.items, config.RECENT, self.state.get_font())
 
         if new == 2:
-            fill_tree(self.favsPanel.tree, self.favs.items, config.FAVS, self.state.get_font())
+            fill_tree(self.favs_panel.tree, self.favs.items, config.FAVS, self.state.get_font())
 
     def on_selector_changed(self, label, path):   
         if (str(label) == config.RECENT or str(label) == config.FAVS or len(path) == 1):
@@ -475,7 +475,7 @@ class MyFrame(wx.Frame):
         self.open_file(label, path)
 
     def set_current(self, track, path):
-        self.currentTrack = (track, path)
+        self.current_track = (track, path)
 
     def init_player_file(self):
         xs = self.recent.items 
@@ -488,27 +488,27 @@ class MyFrame(wx.Frame):
         self.display.SetLabel('   ' + label)
         faders = self.state.get_faders(path)
         self.player.load(path_to_csd_file(path), faders)
-        faders.set_ui(self.uiFaders)
+        faders.set_ui(self.ui_faders)
         self.set_current(label, path)
         self.recent.append((label, path))
 
     def close_file(self): 
-        if self.currentTrack:       
+        if self.current_track:       
             self.state.setFaders(self.get_current_path(), self.get_current_faders())
 
     def get_current_path(self):        
-        return self.currentTrack[1]
+        return self.current_track[1]
 
     def get_current_faders(self):
         def get(name):
-            return float(self.uiFaders[name].GetValue()) / 100
+            return float(self.ui_faders[name].GetValue()) / 100
 
         return faders.Faders(get(config.VOLUME), get(config.FX), get(config.CUT_OFF), get(config.RESONANCE))
 
     def on_exit(self, evt):
         self.close_file()
         self.player.close()
-        self.state.close(self.recent, self.favs, self.tuningId)        
+        self.state.close(self.recent, self.favs, self.tuning_id)        
         self.Destroy()
 
 class MyApp(wx.App):

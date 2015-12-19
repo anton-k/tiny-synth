@@ -20,8 +20,8 @@ class Piano(wx.Panel):
     def __init__(self, parent, id, player):
         wx.Panel.__init__(self, parent, id)
         self.parent = parent
-        self.trackMove = False
-        self.currentKey = None
+        self.track_move = False
+        self.current_key = None
         self.active_keys = []
         self.player = player
 
@@ -58,8 +58,8 @@ class Piano(wx.Panel):
         self.paint_board()        
         for key in self.active_keys:
             self.paint_key(key)
-        if self.currentKey is not None:
-            self.paint_key(self.currentKey)
+        if self.current_key is not None:
+            self.paint_key(self.current_key)
 
 
     def play_note_on(self, key):
@@ -71,33 +71,33 @@ class Piano(wx.Panel):
             self.player.note_off(key_to_midi(key), 60)
 
     def on_click(self, event):        
-        self.currentKey = self.get_current_key()        
+        self.current_key = self.get_current_key()        
         self.redraw()
-        self.trackMove = True
+        self.track_move = True
 
-        self.play_note_on(self.currentKey)
+        self.play_note_on(self.current_key)
 
     def on_release(self, event):        
-        self.play_note_off(self.currentKey)
-        self.trackMove = False
-        self.currentKey = None 
+        self.play_note_off(self.current_key)
+        self.track_move = False
+        self.current_key = None 
         self.redraw()        
 
     def on_motion(self, event):
-        if self.trackMove:    
+        if self.track_move:    
             p = self.get_mouse_point()
-            if self.currentKey:
-                for r in key_rect_by_num[self.currentKey % 12]:
+            if self.current_key:
+                for r in KEY_RECT_BY_NUM[self.current_key % 12]:
                     if within_rect(p, r):
                         return True                        
             key = self.get_current_key()
-            if key == self.currentKey:
+            if key == self.current_key:
                 return True    
             
-            self.play_note_off(self.currentKey)
+            self.play_note_off(self.current_key)
             if key is not None:
                 self.play_note_on(key)
-            self.currentKey = key            
+            self.current_key = key            
             self.redraw()
 
     def on_size(self, event):
@@ -129,8 +129,11 @@ topY = 0.02
 halfTopY = 0.645
 botY = 0.975
 halfBotY = botY - halfTopY
-keyStart = [0.003, 0.043, 0.072,  0.13,  0.144,  0.221, 0.257, 0.29,  0.34, 0.36, 0.42, 0.435]
-keyLen =   [0.061, 0.045 , 0.061, 0.045, 0.061,  0.061, 0.045, 0.061, 0.043, 0.061, 0.043, 0.061]
+keyStart = [ 0.003, 0.043, 0.072,  0.13,  0.144,  0.221
+           , 0.257, 0.29,  0.34, 0.36, 0.42, 0.435]
+
+keyLen =   [0.061, 0.045 , 0.061, 0.045, 0.061,  0.061
+           , 0.045, 0.061, 0.043, 0.061, 0.043, 0.061]
 
 keyLines = [   
       [(keyStart[0], topY, keyStart[0], botY), (keyStart[0], botY, keyStart[0] + keyLen[0], botY)]   
@@ -159,13 +162,13 @@ def get_key_num(x, y):
     else:
         dn = 0
         x1 = x
-    for i, r in key_rects:
-        if within_rect((x1, y), r):
+    for i, rect in KEY_RECTS:
+        if within_rect((x1, y), rect):
             return (i + dn)
     return None
     
 
-key_rects = [
+KEY_RECTS = [
       (0, (0,     0, 0.043, halfTopY))
     , (1, (0.043, 0, 0.045, halfTopY))
     , (2, (0.088, 0, 0.042, halfTopY))
@@ -187,4 +190,4 @@ key_rects = [
     , (11, (0.433, halfTopY, 0.065, halfBotY))
 ]
 
-key_rect_by_num = [[y for i, y in key_rects if i == x] for x in range(12)]
+KEY_RECT_BY_NUM = [[y for i, y in KEY_RECTS if i == x] for x in range(12)]
