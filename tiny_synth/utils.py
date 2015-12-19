@@ -76,7 +76,7 @@ def mkSubMenu(root, parent, title, items):
         mkItem(root, submenu, item)                
     parent.AppendMenu(wx.ID_ANY, title, submenu)
 
-def mkMenuBar(frame, items):
+def make_menu_bar(frame, items):
     menubar = wx.MenuBar()
     for item in items:
         mkMenu(frame, menubar, item.title, item.children)

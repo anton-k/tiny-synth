@@ -1,5 +1,5 @@
 import wx
-import tiny_synth.inits as inits
+import tiny_synth.config as config
 
 def scale_bitmap(bitmap, width, height):
     image = wx.ImageFromBitmap(bitmap)
@@ -25,105 +25,105 @@ class Piano(wx.Panel):
         self.active_keys = []
         self.player = player
 
-        self.Bind(wx.EVT_PAINT, self.OnPaint)
-        self.Bind(wx.EVT_SIZE, self.OnSize)
-        self.Bind(wx.EVT_LEFT_DOWN, self.OnClick)
-        self.Bind(wx.EVT_LEFT_UP, self.OnRelease)
-        self.Bind(wx.EVT_MOTION, self.OnMotion)
+        self.Bind(wx.EVT_PAINT, self.on_paint)
+        self.Bind(wx.EVT_SIZE, self.on_size)
+        self.Bind(wx.EVT_LEFT_DOWN, self.on_click)
+        self.Bind(wx.EVT_LEFT_UP, self.on_release)
+        self.Bind(wx.EVT_MOTION, self.on_motion)
 
-    def OnPaint(self, event):        
-        self.paintBoard()        
+    def on_paint(self, event):        
+        self.paint_board()        
 
-    def getMousePoint(self):
+    def get_mouse_point(self):
         w, h = self.GetSize()
         def rescale(x, y):
             return (float(x)/w, float(y)/h)
         return rescale(*self.ScreenToClient(wx.GetMousePosition()))
 
-    def getCurrentKey(self):
-        return getKeyNum(*self.getMousePoint())
+    def get_current_key(self):
+        return get_key_num(*self.get_mouse_point())
 
-    def keyOn(self, n):        
+    def key_on(self, n):        
         if is_visible_key(n):
             self.active_keys.append(to_piano_key(n))
             self.redraw()
 
-    def keyOff(self, n):
+    def key_off(self, n):
         if is_visible_key(n):
             if not(n in self.active_keys):
                 self.active_keys.remove(to_piano_key(n))
                 self.redraw()           
 
     def redraw(self):
-        self.paintBoard()        
+        self.paint_board()        
         for key in self.active_keys:
-            self.paintKey(key)
+            self.paint_key(key)
         if self.currentKey is not None:
-            self.paintKey(self.currentKey)
+            self.paint_key(self.currentKey)
 
 
-    def playNoteOn(self, key):
+    def play_note_on(self, key):
         if key is not None:
-            self.player.noteOn(key_to_midi(key), 60)
+            self.player.note_on(key_to_midi(key), 60)
 
-    def playNoteOff(self, key): 
+    def play_note_off(self, key): 
         if key is not None:
-            self.player.noteOff(key_to_midi(key), 60)
+            self.player.note_off(key_to_midi(key), 60)
 
-    def OnClick(self, event):        
-        self.currentKey = self.getCurrentKey()        
+    def on_click(self, event):        
+        self.currentKey = self.get_current_key()        
         self.redraw()
         self.trackMove = True
 
-        self.playNoteOn(self.currentKey)
+        self.play_note_on(self.currentKey)
 
-    def OnRelease(self, event):        
-        self.playNoteOff(self.currentKey)
+    def on_release(self, event):        
+        self.play_note_off(self.currentKey)
         self.trackMove = False
         self.currentKey = None 
         self.redraw()        
 
-    def OnMotion(self, event):
+    def on_motion(self, event):
         if self.trackMove:    
-            p = self.getMousePoint()
+            p = self.get_mouse_point()
             if self.currentKey:
-                for r in keyRectByNum[self.currentKey % 12]:
-                    if withinRect(p, r):
+                for r in key_rect_by_num[self.currentKey % 12]:
+                    if within_rect(p, r):
                         return True                        
-            key = self.getCurrentKey()
+            key = self.get_current_key()
             if key == self.currentKey:
                 return True    
             
-            self.playNoteOff(self.currentKey)
+            self.play_note_off(self.currentKey)
             if key is not None:
-                self.playNoteOn(key)
+                self.play_note_on(key)
             self.currentKey = key            
             self.redraw()
 
-    def OnSize(self, event):
+    def on_size(self, event):
         self.Refresh()
 
-    def paintBoard(self):
+    def paint_board(self):
         dc = wx.PaintDC(self)
         w, h = self.GetSize()        
-        bmp = scale_bitmap(wx.Bitmap(inits.key_pic), w/2, h)
+        bmp = scale_bitmap(wx.Bitmap(config.KEY_PIC), w/2, h)
         dc.DrawBitmap(bmp, 0, 0)
         dc.DrawBitmap(bmp, w/2, 0)
 
-    def paintKey(self, n):
+    def paint_key(self, n):
         dc = wx.PaintDC(self)
         w, h = self.GetSize()
         pen = wx.Pen('blue')
         pen.SetWidth(4)
         dc.SetPen(pen)
         
-        def toAbs(x):
+        def to_abs(x):
             if (n < 12):
                 return (w * x[0], h * x[1], w * x[2], h * x[3])
             else:
                 return (w/2 + w * x[0], h * x[1], w/2 + w * x[2], h * x[3])
 
-        dc.DrawLineList(map(toAbs, keyLines[n % 12]))
+        dc.DrawLineList(map(to_abs, keyLines[n % 12]))
 
 topY = 0.02
 halfTopY = 0.645
@@ -147,25 +147,25 @@ keyLines = [
     , [(keyStart[11], halfTopY, keyStart[11], botY), (keyStart[11], botY, keyStart[11] + keyLen[11], botY)]    
 ]
 
-def withinRect(p, rect):
+def within_rect(p, rect):
     x, y = p
     xr, yr, wr, hr = rect
     return (x >= xr and x < xr + wr and y >= yr and y < yr + hr)
 
-def getKeyNum(x, y):
+def get_key_num(x, y):
     if x >= 0.5:
         x1 = x - 0.5
         dn = 12
     else:
         dn = 0
         x1 = x
-    for i, r in keyRects:
-        if withinRect((x1, y), r):
+    for i, r in key_rects:
+        if within_rect((x1, y), r):
             return (i + dn)
     return None
     
 
-keyRects = [
+key_rects = [
       (0, (0,     0, 0.043, halfTopY))
     , (1, (0.043, 0, 0.045, halfTopY))
     , (2, (0.088, 0, 0.042, halfTopY))
@@ -187,4 +187,4 @@ keyRects = [
     , (11, (0.433, halfTopY, 0.065, halfBotY))
 ]
 
-keyRectByNum = [[y for i, y in keyRects if i == x] for x in range(12)]
+key_rect_by_num = [[y for i, y in key_rects if i == x] for x in range(12)]

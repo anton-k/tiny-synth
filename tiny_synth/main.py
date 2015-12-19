@@ -11,12 +11,12 @@ import json
 
 from tiny_synth.utils import *
 from tiny_synth.piano import Piano
-import tiny_synth.inits as inits
+import tiny_synth.config as config
 import tiny_synth.midi as midi
 import tiny_synth.faders as faders 
 from tiny_synth.player import Player
 
-def readPickleConfig(name, cfg, defaultVal, from_string):
+def read_pickle_config(name, cfg, defaultVal, from_string):
     raw = cfg.Read(name, '')
     if raw == '':
         return defaultVal
@@ -26,95 +26,95 @@ def readPickleConfig(name, cfg, defaultVal, from_string):
         except:
             return defaultVal
 
-def getRecent(cfg):
+def get_recent(cfg):
     rawList = self.cfg.Read
 
 
 class St():
     def __init__(self):
-        self.cfg = wx.Config(inits.cfgName)
-        self.fadersDict = readPickleConfig(inits.fadersDictName, self.cfg, {}, faders.Faders.from_string)
-        self.recent     = readPickleConfig(inits.recent, self.cfg, Recent(), Recent.from_string)
-        self.favs       = readPickleConfig(inits.favs, self.cfg, Favorites(), Favorites.from_string)
-        self.fontSize   = readPickleConfig(inits.fontSize, self.cfg, inits.defaultFontSize, int)
-        self.tuning     = readPickleConfig(inits.tuning, self.cfg, inits.defaultTuning, int)
+        self.cfg = wx.Config(config.CFG_NAME)
+        self.fadersDict = read_pickle_config(config.FADERS_DICT_NAME, self.cfg, {}, faders.Faders.from_string)
+        self.recent     = read_pickle_config(config.RECENT, self.cfg, Recent(), Recent.from_string)
+        self.favs       = read_pickle_config(config.FAVS, self.cfg, Favorites(), Favorites.from_string)
+        self.fontSize   = read_pickle_config(config.FONT_SIZE, self.cfg, config.DEFAULT_FONT_SIZE, int)
+        self.tuning     = read_pickle_config(config.TUNING, self.cfg, config.DEFAULT_TUNING, int)
 
-    def getRecent(self):
+    def get_recent(self):
         return self.recent
 
-    def setRecent(self, recent):
-        self.cfg.Write(inits.recent, recent.to_string())
+    def set_recent(self, recent):
+        self.cfg.Write(config.RECENT, recent.to_string())
 
-    def getFavs(self):
+    def get_favs(self):
         return self.favs
 
-    def getTuningId(self):        
+    def get_tuning_id(self):        
         return self.tuning
 
-    def setFavs(self, favs):
-        self.cfg.Write(inits.favs, favs.to_string())
+    def set_favs(self, favs):
+        self.cfg.Write(config.FAVS, favs.to_string())
 
-    def getFaders(self, path):
-        return faders.loadFromFile(self.fadersDict, pathToCsdFile(path))
+    def get_faders(self, path):
+        return faders.load_from_file(self.fadersDict, path_to_csd_file(path))
 
     def setFaders(self, path, val):
-        faders.updateFile(self.fadersDict, pathToCsdFile(path), val)
+        faders.update_file(self.fadersDict, path_to_csd_file(path), val)
 
-    def setFontSize(self, val):
-        self.cfg.Write(inits.fontSize, str(val))
+    def set_font_size(self, val):
+        self.cfg.Write(config.FONT_SIZE, str(val))
 
-    def setTuning(self, val):
-        self.cfg.Write(inits.tuning, str(val))
+    def set_tuning(self, val):
+        self.cfg.Write(config.TUNING, str(val))
 
-    def upFontSize(self):
+    def up_font_size(self):
         self.fontSize = min(self.fontSize + 1, 18)
-        self.setFontSize(self.fontSize)
+        self.set_font_size(self.fontSize)
 
-    def downFontSize(self):
+    def down_font_size(self):
         self.fontSize = max(self.fontSize - 1, 6)
-        self.setFontSize(self.fontSize)
+        self.set_font_size(self.fontSize)
 
     def close(self, recent, favs, tuningId):
-        self.cfg.Write(inits.fadersDictName, faders.Faders.to_string(self.fadersDict))
-        self.setFavs(favs)
-        self.setRecent(recent) 
-        self.setTuning(tuningId)       
+        self.cfg.Write(config.FADERS_DICT_NAME, faders.Faders.to_string(self.fadersDict))
+        self.set_favs(favs)
+        self.set_recent(recent) 
+        self.set_tuning(tuningId)       
 
-    def getFont(self):
-        font = wx.SystemSettings_GetFont(wx.SYS_SYSTEM_FONT)
+    def get_font(self):
+        font = wx.SystemSettings.GetFont(wx.SYS_SYSTEM_FONT)
         font.SetPointSize(self.fontSize)        
         return font
 
-def mkNode(path, root, tree, nodes, font):
+def make_node(path, root, tree, nodes, font):
     path1 = path[:]
     if isinstance(nodes, tuple):
         path1.append(nodes[0])
         parent = tree.AppendItem(root, nodes[0], data = wx.TreeItemData(path1))
         tree.SetItemFont(parent, font)
         for x in nodes[1]:            
-            mkNode(path1, parent, tree, x, font)
+            make_node(path1, parent, tree, x, font)
     elif isinstance(nodes, str):
         path1.append(nodes)
         itemId = tree.AppendItem(root, nodes, data = wx.TreeItemData(path1))
         tree.SetItemFont(itemId, font)
 
-def mkTree(frame, panel, labels, cbk, font):
+def make_tree(frame, panel, labels, cbk, font):
     if isinstance(labels, list):
         tree = wx.TreeCtrl(panel, wx.ID_ANY, wx.DefaultPosition, (-1,-1), wx.TR_HIDE_ROOT|wx.TR_HAS_BUTTONS)        
         root = tree.AddRoot('') 
         for x in labels:
-            mkNode([], root, tree, x, font)      
+            make_node([], root, tree, x, font)      
     elif isinstance(labels, tuple):
         tree = wx.TreeCtrl(panel, 1, wx.DefaultPosition, (-1,-1), wx.TR_HAS_BUTTONS)
         root = tree.AddRoot(labels[0])
         for x in labels[1]:
-            mkNode([root], root, tree, x, font)    
+            make_node([root], root, tree, x, font)    
 
-    def onSelChanged(event):
+    def on_selector_changed(event):
         item = event.GetItem()
         cbk(tree.GetItemText(item), tree.GetItemData(item).GetData())
 
-    tree.Bind(wx.EVT_TREE_SEL_CHANGED, onSelChanged, tree)
+    tree.Bind(wx.EVT_TREE_SEL_CHANGED, on_selector_changed, tree)
     return tree
 
 def slider(frame, v, cbk):
@@ -127,41 +127,41 @@ def slider(frame, v, cbk):
     sld.Bind(wx.EVT_SCROLL, go)
     return sld 
 
-def stripExt(x):
+def strip_ext(x):
     return (os.path.splitext(x))[0]
 
-def getInstrumentPath():
+def get_instrument_path():
     return os.path.join(pkg_resources.resource_filename('tiny_synth', ''), 'instruments')    
 
-def getInstruments():
-    instrumentsPath = getInstrumentPath()
+def get_instruments():
+    instrumentsPath = get_instrument_path()
     dirs = glob.glob(os.path.join(instrumentsPath, '*'))
     cats = map(os.path.basename, dirs)
     cats.sort()
     
-    def getCsds(c):
-        files = map(lambda x: stripExt(os.path.basename(x)), glob.glob(os.path.join(instrumentsPath, c, '*')))
+    def get_csds(c):
+        files = map(lambda x: strip_ext(os.path.basename(x)), glob.glob(os.path.join(instrumentsPath, c, '*')))
         files.sort()
         return (c, files)
     
-    return map(getCsds, cats)    
+    return map(get_csds, cats)    
 
 
-taxonomy = getInstruments()
+taxonomy = get_instruments()
 
 class PageOne(wx.Panel):
     def __init__(self, parent, frame):
         wx.Panel.__init__(self, parent)
-        tree = mkTree(frame, self, taxonomy, frame.OnSelChanged, frame.state.getFont())
+        tree = make_tree(frame, self, taxonomy, frame.on_selector_changed, frame.state.get_font())
         vbox = wx.BoxSizer(wx.VERTICAL)
         vbox.Add(tree, 1, wx.EXPAND)
         self.SetSizer(vbox)
-        frame.fontObjects.appendTree(tree)
+        frame.fontObjects.append_tree(tree)
 
-def mkRecentTree(panel, frame, recent):    
-    return mkTree(frame, panel, map(str, recent.items), frame.OnSelChanged, frame.state.getFont())
+def make_recent_tree(panel, frame, recent):    
+    return make_tree(frame, panel, map(str, recent.items), frame.on_selector_changed, frame.state.get_font())
 
-def mkTreeStub(panel, name, font):
+def make_tree_stub(panel, name, font):
     tree = wx.TreeCtrl(panel, wx.ID_ANY, wx.DefaultPosition, (-1,-1), wx.TR_HAS_BUTTONS)
     root = tree.AddRoot(name)
     tree.SetItemFont(root, font)
@@ -173,15 +173,15 @@ def mkTreeStub(panel, name, font):
 class PageTwo(wx.Panel):
     def __init__(self, parent, frame, name):
         wx.Panel.__init__(self, parent)
-        self.tree = mkTreeStub(self, name, frame.state.getFont())
-        self.cbk = frame.OnSelChanged
+        self.tree = make_tree_stub(self, name, frame.state.get_font())
+        self.cbk = frame.on_selector_changed
 
-        def onSelChanged(event):
+        def on_selector_changed(event):
             item = event.GetItem()
-            frame.OnSelChanged(self.tree.GetItemText(item), self.tree.GetItemData(item).GetData())
+            frame.on_selector_changed(self.tree.GetItemText(item), self.tree.GetItemData(item).GetData())
 
-        self.tree.Bind(wx.EVT_TREE_SEL_CHANGED, onSelChanged, self.tree)
-        frame.fontObjects.appendTree(self.tree)
+        self.tree.Bind(wx.EVT_TREE_SEL_CHANGED, on_selector_changed, self.tree)
+        frame.fontObjects.append_tree(self.tree)
 
 class Recent():
     def __init__(self, items = [], limit = 12):
@@ -239,7 +239,7 @@ class Favorites():
     def to_string(self):
         return json.dumps(self.items)
  
-def fillTree(tree, items, name, font):
+def fill_tree(tree, items, name, font):
     tree.DeleteAllItems()
     root = tree.AddRoot(name) 
     tree.SetItemFont(root, font)
@@ -249,8 +249,8 @@ def fillTree(tree, items, name, font):
 
     tree.ExpandAll()
 
-def pathToCsdFile(path):
-    instrumentsPath = getInstrumentPath()
+def path_to_csd_file(path):
+    instrumentsPath = get_instrument_path()
     return os.path.join(instrumentsPath, *path) + u'.csd'
 
 class FontObjects():
@@ -259,13 +259,13 @@ class FontObjects():
         self.texts = []
         self.trees = []
 
-    def setTitle(self, val):
+    def set_title(self, val):
         self.title = val
 
-    def appendText(self, val):
+    def append_text(self, val):
         self.texts.append(val)
 
-    def appendTree(self, val):
+    def append_tree(self, val):
         self.trees.append(val)
 
     def update(self, font):
@@ -273,70 +273,70 @@ class FontObjects():
             x.SetFont(font)
 
         for x in self.trees:
-            updateFontForTree(x, font)
+            update_font_for_tree(x, font)
 
         font.SetWeight(wx.FONTWEIGHT_BOLD)
         self.title.SetFont(font)
 
-def iterateTree(tree, cbk):
-    iterateTreeChild(tree, tree.GetRootItem(), cbk)
+def iterate_tree(tree, cbk):
+    iterate_tree_child(tree, tree.GetRootItem(), cbk)
 
-def iterateTreeChild(tree, item, cbk):    
+def iterate_tree_child(tree, item, cbk):    
     cbk(tree, item)
     (child, cookie) = tree.GetFirstChild(item)    
     while child.IsOk():
         cbk(tree, child)
-        iterateTreeChild(tree, child, cbk)
+        iterate_tree_child(tree, child, cbk)
         (child, cookie) = tree.GetNextChild(item, cookie)
 
-def updateFontForTree(tree, font):
+def update_font_for_tree(tree, font):
     def go(tree, item):
         tree.SetItemFont(item, font)
 
-    iterateTree(tree, go)
+    iterate_tree(tree, go)
 
 
 class MyFrame(wx.Frame):
     def __init__(self, parent, id, title, state):
         wx.Frame.__init__(self, parent, id, title, wx.DefaultPosition, wx.Size(420, 500))
 
-        self.recent = state.getRecent()
-        self.favs = state.getFavs()
-        self.tuningId = state.getTuningId()
+        self.recent = state.get_recent()
+        self.favs = state.get_favs()
+        self.tuningId = state.get_tuning_id()
         self.currentTrack = None
         self.state = state
         self.fontObjects = FontObjects()
 
         self.player = Player()
-        self.player.setTuning(self.tuningId)
+        self.player.set_tuning(self.tuningId)
 
         vbox = wx.BoxSizer(wx.VERTICAL)
         panel1 = wx.Panel(self, -1)
         panel2 = wx.Panel(self, -1)
         piano  = Piano(self, wx.ID_ANY, self.player)
 
-        def onNoteOn(evt):
+        def on_note_on(evt):
             pch, vol = evt.GetValue()
-            piano.keyOn(pch)
+            piano.key_on(pch)
 
-        def onNoteOff(evt):
+        def on_note_off(evt):
             pch, vol = evt.GetValue()
-            piano.keyOff(pch)     
+            piano.key_off(pch)     
 
         self.midis = midi.MidiThread(self, self.player)
         self.midis.run()
-        self.Bind(midi.EVT_NOTE_ON, onNoteOn)
-        self.Bind(midi.EVT_NOTE_OFF, onNoteOff)
+        self.Bind(midi.EVT_NOTE_ON, on_note_on)
+        self.Bind(midi.EVT_NOTE_OFF, on_note_off)
 
-        self.Bind(wx.EVT_CLOSE, self.onExit)
+        self.Bind(wx.EVT_CLOSE, self.on_exit)
 
         p = panel1
         nb = wx.Notebook(p)
 
         # create the page windows as children of the notebook
         page1 = PageOne(nb, self)
-        page2 = PageTwo(nb, self, inits.recent)
-        page3 = PageTwo(nb, self, inits.favs)
+        page2 = PageTwo(nb, self, config.RECENT)
+        page3 = PageTwo(nb, self, config.FAVS)
 
         self.recentPanel = page2
         self.favsPanel   = page3
@@ -349,7 +349,7 @@ class MyFrame(wx.Frame):
         nb.AddPage(page3, "Favorites")
         self.tabs = nb
 
-        self.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGED, self.OnPageChanged)
+        self.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGED, self.on_page_changed)
 
         # finally, put the notebook in a sizer for the panel to manage
         # the layout
@@ -358,85 +358,85 @@ class MyFrame(wx.Frame):
         p.SetSizer(sizer)
 
         self.display = wx.StaticText(panel2, -1, '',(10,10), style=wx.ALIGN_CENTRE)
-        font = state.getFont()
+        font = state.get_font()
         font.SetWeight(wx.FONTWEIGHT_BOLD)
         self.display.SetFont(font)
-        self.fontObjects.setTitle(self.display)
+        self.fontObjects.set_title(self.display)
 
         hbox = hor([panel1, panel2])
 
         self.uiFaders = {}
 
-        def mkSlider(name):
+        def make_slider(name):
             def cbk(val):
                 self.player.setValue(name, val)
             ui = slider(panel2, 0, cbk)            
             self.uiFaders[name] = ui
-            text = staticText(panel2, name, font = self.state.getFont())
-            self.fontObjects.appendText(text)
+            text = staticText(panel2, name, font = self.state.get_font())
+            self.fontObjects.append_text(text)
             return ver([Cell(ui, border = 7), Cell(text, flags = wx.ALIGN_CENTRE, border = 7)])
         
-        vbox2 = ver([staticText(panel2, ''), mkSlider(inits.volume), mkSlider(inits.fx), mkSlider(inits.cutOff), mkSlider(inits.resonance)])
+        vbox2 = ver([staticText(panel2, ''), make_slider(config.VOLUME), make_slider(config.FX), make_slider(config.CUT_OFF), make_slider(config.RESONANCE)])
         panel2.SetSizer(vbox2)
         self.SetSizer(ver([Cell(hbox, scale = 3.8), Cell(piano, scale = 1)]))
         self.Centre()
 
-        self.initPlayerFile()
+        self.init_player_file()
         
-        def setTuning(n):
+        def set_tuning(n):
             def go(evt):
                 self.tuningId = n
-                self.player.setTuning(n)
+                self.player.set_tuning(n)
             return go
 
-        mkMenuBar(self, [
+        make_menu_bar(self, [
               menuItem('&File',[
-                  normalItem('Add to favs', cbk = self.OnAddToFavs)
-                , normalItem('Remove from favs', cbk = self.OnRemoveFromFavs)
+                  normalItem('Add to favs', cbk = self.on_add_to_favs)
+                , normalItem('Remove from favs', cbk = self.on_remove_frome_favs)
                # , normalItem('Settings')
                 ])
             , menuItem('&Edit', [
-                  normalItem('Enlarge font', cbk = self.OnFontUp)
-                , normalItem('Shrink  font', cbk = self.OnFontDown)
-                , menuItem('Tuning', [ radioItem(name, cbk = setTuning(i), is_check = self.tuningId == i) for i, name in enumerate(inits.tunings) ])
+                  normalItem('Enlarge font', cbk = self.on_font_up)
+                , normalItem('Shrink  font', cbk = self.on_font_down)
+                , menuItem('Tuning', [ radioItem(name, cbk = set_tuning(i), is_check = self.tuningId == i) for i, name in enumerate(config.TUNINGS) ])
             ])  
             , menuItem('&Help',[                  
-                normalItem('About', cbk = self.OnAbout)  
+                normalItem('About', cbk = self.on_about)  
                 ])])
 
 
-        upFontId = wx.NewId()
-        downFontId = wx.NewId()        
-        self.Bind(wx.EVT_MENU, self.OnFontUp, id=upFontId)
-        self.Bind(wx.EVT_MENU, self.OnFontDown, id=downFontId)
-        self.accel_tbl = wx.AcceleratorTable([(wx.ACCEL_CTRL,  ord('='), upFontId), (wx.ACCEL_CTRL,  ord('-'), downFontId)])
+        up_font_id = wx.NewId()
+        down_font_id = wx.NewId()        
+        self.Bind(wx.EVT_MENU, self.on_font_up, id=up_font_id)
+        self.Bind(wx.EVT_MENU, self.on_font_down, id=down_font_id)
+        self.accel_tbl = wx.AcceleratorTable([(wx.ACCEL_CTRL,  ord('='), up_font_id), (wx.ACCEL_CTRL,  ord('-'), down_font_id)])
         self.SetAcceleratorTable(self.accel_tbl)
 
 
-    def OnFontUp(self, e):       
-        self.state.upFontSize()
-        self.fontObjects.update(self.state.getFont())
+    def on_font_up(self, e):       
+        self.state.up_font_size()
+        self.fontObjects.update(self.state.get_font())
 
 
-    def OnFontDown(self, e):        
-        self.state.downFontSize()
-        self.fontObjects.update(self.state.getFont())
+    def on_font_down(self, e):        
+        self.state.down_font_size()
+        self.fontObjects.update(self.state.get_font())
 
-    def OnAddToFavs(self, event):
+    def on_add_to_favs(self, event):
         if self.currentTrack:
             self.favs.add(self.currentTrack)
 
-    def OnRemoveFromFavs(self, event):
+    def on_remove_frome_favs(self, event):
         if self.currentTrack:
             self.favs.remove(self.currentTrack)
-        if self.isFavsTab():
-            fillTree(self.favsPanel.tree, self.favs.items, inits.favs, self.state.getFont())
+        if self.is_favs_tab():
+            fill_tree(self.favsPanel.tree, self.favs.items, config.FAVS, self.state.get_font())
         self.favsPanel.Refresh()
 
-    def isFavsTab(self):
+    def is_favs_tab(self):
         return self.currentTab == 2
 
-    def OnAbout(self, e):    
+    def on_about(self, e):    
         description = """Tiny synth is a collection of instruments designed with csound-expression library.
 """
 
@@ -458,55 +458,55 @@ class MyFrame(wx.Frame):
         wx.AboutBox(info)
 
 
-    def OnPageChanged(self, event):
+    def on_page_changed(self, event):
         old = event.GetOldSelection()
         new = event.GetSelection()
         self.currentTab = new
 
         if new == 1:
-            fillTree(self.recentPanel.tree, self.recent.items, inits.recent, self.state.getFont())
+            fill_tree(self.recentPanel.tree, self.recent.items, config.RECENT, self.state.get_font())
 
         if new == 2:
-            fillTree(self.favsPanel.tree, self.favs.items, inits.favs, self.state.getFont())
+            fill_tree(self.favsPanel.tree, self.favs.items, config.FAVS, self.state.get_font())
 
-    def OnSelChanged(self, label, path):   
-        if (str(label) == inits.recent or str(label) == inits.favs or len(path) == 1):
+    def on_selector_changed(self, label, path):   
+        if (str(label) == config.RECENT or str(label) == config.FAVS or len(path) == 1):
             return
-        self.openFile(label, path)
+        self.open_file(label, path)
 
-    def setCurrent(self, track, path):
+    def set_current(self, track, path):
         self.currentTrack = (track, path)
 
-    def initPlayerFile(self):
+    def init_player_file(self):
         xs = self.recent.items 
         if xs:
             (label, path) = xs[0]
-            self.openFile(label, path)
+            self.open_file(label, path)
 
-    def openFile(self, label, path):
-        self.closeFile()
+    def open_file(self, label, path):
+        self.close_file()
         self.display.SetLabel('   ' + label)
-        faders = self.state.getFaders(path)
-        self.player.load(pathToCsdFile(path), faders)
-        faders.setUi(self.uiFaders)
-        self.setCurrent(label, path)
+        faders = self.state.get_faders(path)
+        self.player.load(path_to_csd_file(path), faders)
+        faders.set_ui(self.uiFaders)
+        self.set_current(label, path)
         self.recent.append((label, path))
 
-    def closeFile(self): 
+    def close_file(self): 
         if self.currentTrack:       
-            self.state.setFaders(self.getCurrentPath(), self.getCurrentFaders())
+            self.state.setFaders(self.get_current_path(), self.get_current_faders())
 
-    def getCurrentPath(self):        
+    def get_current_path(self):        
         return self.currentTrack[1]
 
-    def getCurrentFaders(self):
+    def get_current_faders(self):
         def get(name):
             return float(self.uiFaders[name].GetValue()) / 100
 
-        return faders.Faders(get(inits.volume), get(inits.fx), get(inits.cutOff), get(inits.resonance))
+        return faders.Faders(get(config.VOLUME), get(config.FX), get(config.CUT_OFF), get(config.RESONANCE))
 
-    def onExit(self, evt):
-        self.closeFile()
+    def on_exit(self, evt):
+        self.close_file()
         self.player.close()
         self.state.close(self.recent, self.favs, self.tuningId)        
         self.Destroy()

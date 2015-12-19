@@ -3,9 +3,9 @@ import wx
 import json
 import copy
 
-from tiny_synth import inits
+from tiny_synth import config
 
-def loadFromFile(dict, file):
+def load_from_file(dict, file):
     if file in dict:
         res = dict[file]
         if res:
@@ -15,7 +15,7 @@ def loadFromFile(dict, file):
     return defaultFaders
 
 
-def updateFile(dict, file, faders):
+def update_file(dict, file, faders):
     dict[file] = faders
 
 class Faders():
@@ -25,20 +25,20 @@ class Faders():
         self.cutOff = cf
         self.resonance = res
 
-    def setPlayer(self, player):
-        player.setValue(inits.volume, self.volume)
-        player.setValue(inits.fx, self.fx)
-        player.setValue(inits.cutOff, self.cutOff)
-        player.setValue(inits.resonance, self.resonance)
+    def set_player(self, player):
+        player.set_value(config.VOLUME, self.volume)
+        player.set_value(config.FX, self.fx)
+        player.set_value(config.CUT_OFF, self.cutOff)
+        player.set_value(config.RESONANCE, self.resonance)
 
-    def setUi(self, ui):        
-        def setUi(name, val):
+    def set_ui(self, ui):        
+        def set_ui(name, val):
             ui[name].SetValue(100 * val)
 
-        setUi(inits.volume, self.volume)
-        setUi(inits.fx, self.fx)
-        setUi(inits.cutOff, self.cutOff)
-        setUi(inits.resonance, self.resonance)
+        set_ui(config.VOLUME, self.volume)
+        set_ui(config.FX, self.fx)
+        set_ui(config.CUT_OFF, self.cutOff)
+        set_ui(config.RESONANCE, self.resonance)
 
     def to_tuple(self):
         return (self.volume, self.fx, self.cutOff, self.resonance)

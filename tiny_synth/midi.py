@@ -41,29 +41,29 @@ class MidiThread(Thread):
         self.player = player
 
     def run(self):
-        def onNoteOn(pch, vol):
+        def on_note_on(pch, vol):
             evt = NoteOnEvent(myEVT_NOTE_ON, -1, pch, vol)
             wx.PostEvent(self.parent, evt)
-            self.player.noteOn(pch, vol)
+            self.player.note_on(pch, vol)
 
-        def onNoteOff(pch, vol):
+        def on_note_off(pch, vol):
             evt = NoteOffEvent(myEVT_NOTE_OFF, -1, pch, vol)
             wx.PostEvent(self.parent, evt)
-            self.player.noteOff(pch, vol)
+            self.player.note_off(pch, vol)
 
-        self.midis = init_midi_notes(onNoteOn, onNoteOff)
+        self.midis = init_midi_notes(on_note_on, on_note_off)
 
     def close():        
         close_midi(self.midis)
 
-def init_midi_notes(onNoteOn, onNoteOff):
+def init_midi_notes(on_note_on, on_note_off):
     def cbk(event, data=None):
         msg, tick = event
         flag, pch, vol = msg
         if flag == NOTE_ON:
-            onNoteOn(pch, vol)
+            on_note_on(pch, vol)
         if flag == NOTE_OFF:
-            onNoteOff(pch, vol)
+            on_note_off(pch, vol)
 
     return init_midi(cbk)
 

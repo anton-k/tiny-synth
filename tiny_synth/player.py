@@ -1,15 +1,15 @@
 import unicodedata
 import csnd6
 
-import tiny_synth.inits as inits
+import tiny_synth.config as config
 
 def unicode2string(x):
     return unicodedata.normalize('NFKD', x).encode('ascii','ignore')
 
-def noteOnMsg(pch, vol):
+def note_onMsg(pch, vol):
     return ("i \"main\" 0 0.1 1 %d %d" % (pch, vol))
 
-def noteOffMsg(pch):
+def note_offMsg(pch):
     return ("i \"main\" 0 0.1 0 %d %d" % (pch, 0))
 
 class KeyList():
@@ -32,7 +32,7 @@ class Player():
         self.active_keys = KeyList()
         self.tuning = 0
 
-    def setTuning(self, val):
+    def set_tuning(self, val):
         self.tuning = val
 
     def close(self):
@@ -46,21 +46,21 @@ class Player():
         self.engine.Start()
         self.audioThread = csnd6.CsoundPerformanceThread(self.engine)
         self.audioThread.Play()
-        faders.setPlayer(self)
-        self.setValue(inits.tuning, self.tuning)
+        faders.set_player(self)
+        self.set_value(config.TUNING, self.tuning)
         self.retrigger_active_keys()        
 
     def retrigger_active_keys(self):
         for pch, vol in self.active_keys.getData():
-            self.audioThread.InputMessage(noteOnMsg(pch, vol))
+            self.audioThread.InputMessage(note_onMsg(pch, vol))
 
-    def noteOn(self, pch, vol):      
+    def note_on(self, pch, vol):      
         self.active_keys.append(pch, vol)        
-        self.audioThread.InputMessage(noteOnMsg(pch, vol))
+        self.audioThread.InputMessage(note_onMsg(pch, vol))
 
-    def noteOff(self, pch, vol):
+    def note_off(self, pch, vol):
         self.active_keys.remove(pch)
-        self.audioThread.InputMessage(noteOffMsg(pch))
+        self.audioThread.InputMessage(note_offMsg(pch))
 
     def stop(self):          
         if self.audioThread:            
@@ -69,5 +69,5 @@ class Player():
             self.engine.Cleanup()
             self.engine.Reset() 
 
-    def setValue(self, name, val):
+    def set_value(self, name, val):
         self.engine.SetChannel(name, val)
